@@ -6,9 +6,8 @@ Jana Markovic RN 126/21
 Sofija Savic RN 143/22
 
 
-bp_tim_34	d1YyZXo2Hv1HjviE	"Digitalna televizija (npr. EON)
+bp_tim_35	qwoL6NicEhmL7emn	
 
-Evidencija kanala, kategorija sadrzaja, konkretnog programa, video klub... + raspored TV programa (kada, na kom kanalu, u kom terminu se emituje koji sadrzaj u nekom periodu)"
-bp_tim_35	qwoL6NicEhmL7emn	"Rent-a-Car
+"Rent-a-Car
 
 Tipovi i kategorije vozila, cenovnik po godinama, evidencija klijenata i svih njihovih iznajmljenih vozila, sa ili bez vozaca, ..."
