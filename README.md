@@ -11,3 +11,6 @@ bp_tim_35	qwoL6NicEhmL7emn
 "Rent-a-Car
 
 Tipovi i kategorije vozila, cenovnik po godinama, evidencija klijenata i svih njihovih iznajmljenih vozila, sa ili bez vozaca, ..."
+
+
+bp_tim_35	writer	qwoL6NicEhmL7emn
