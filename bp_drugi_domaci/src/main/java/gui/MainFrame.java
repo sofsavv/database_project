@@ -40,7 +40,9 @@ public class MainFrame extends JFrame {
         setPreferredSize(new Dimension(700, 500));
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        runBtn = new JButton("RUN");
+        runBtn = new JButton();
+        runBtn.setIcon(new ImageIcon("run.png"));
+
         buttonPanel.setAlignmentX(getAlignmentX());
         buttonPanel.add(runBtn);
 
