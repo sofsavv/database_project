@@ -1,4 +1,4 @@
-package sql_abstraction;
+package model.sql_abstraction;
 
 public class OrderByClause extends AbstractClause{
     public OrderByClause() {
