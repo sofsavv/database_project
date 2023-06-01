@@ -2,7 +2,6 @@ package app;
 
 import database.Database;
 import database.MongoDB;
-import database.settings.Settings;
 import gui.table.TableModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,6 @@ import lombok.Setter;
 public class AppCore {
 
     private Database database;
-    private Settings settings;
     private TableModel tableModel;
 
     public AppCore() {

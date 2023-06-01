@@ -17,9 +17,7 @@ public class MainFrame extends JFrame {
     private JTextArea textArea;
     private JTable jTable;
 
-    private MainFrame() {
-
-    }
+    private MainFrame() {}
 
     public static MainFrame getInstance(){
         if (instance==null){
@@ -28,7 +26,6 @@ public class MainFrame extends JFrame {
         }
         return instance;
     }
-
 
     private void initialise() {
 
@@ -61,7 +58,7 @@ public class MainFrame extends JFrame {
         JPanel textPanel = new JPanel(new BorderLayout());
         textPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
-        textArea = new JTextArea(5,40);
+        textArea = new JTextArea(5,20);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textArea);

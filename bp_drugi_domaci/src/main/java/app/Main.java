@@ -13,7 +13,7 @@ public class Main {
         MainFrame mainFrame = MainFrame.getInstance();
         mainFrame.setAppCore(appCore);
 
-        appCore.readDataFromTable("employees");
+//        appCore.readDataFromTable("employees");
 
     }
 

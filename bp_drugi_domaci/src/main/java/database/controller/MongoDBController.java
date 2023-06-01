@@ -23,6 +23,5 @@ public class MongoDBController {
         System.out.println ("Mongo Database connection established");
 
         return mongoClient;
-
     }
 }
