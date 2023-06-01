@@ -31,9 +31,10 @@ public class MainFrame extends JFrame {
     private void initialise() {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Image icon = Toolkit.getDefaultToolkit().getImage("bp_drugi_domaci/src/main/resources/m1.png");
+        this.setIconImage(icon);
 
         jTable = new JTable();
-//        jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));
         jTable.setFillsViewportHeight(true);
         setPreferredSize(new Dimension(700, 500));
 
@@ -48,21 +49,24 @@ public class MainFrame extends JFrame {
 //        }else{
 //            System.err.println("Resource not found: " + fileName);
 //        }
-
         runBtn = new JButton("RUN");
-        runBtn.setBackground(Color.GREEN);
+//        runBtn.setBackground(Color.GREEN);
         runBtn.setForeground(Color.WHITE);
+        runBtn.setBackground(Color.decode("#137C56"));
+
         runBtn.setFont(new Font("Arial", Font.BOLD, 15));
 
         runBtn.addActionListener(new RunAction());
 
         buttonPanel.setAlignmentX(getAlignmentX());
+        buttonPanel.setBackground(Color.decode("#DAD2BC"));
         buttonPanel.add(runBtn);
 
         JPanel textPanel = new JPanel(new BorderLayout());
-        textPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        textPanel.setBorder(BorderFactory.createEmptyBorder(10,10,50,10));
 
         textArea = new JTextArea(5,20);
+        textPanel.setBackground(Color.decode("#DAD2BC"));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
