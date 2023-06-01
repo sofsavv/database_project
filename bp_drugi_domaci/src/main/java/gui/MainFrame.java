@@ -1,6 +1,7 @@
 package gui;
 
 import app.AppCore;
+import controller.RunAction;
 import lombok.Data;
 
 import javax.swing.*;
@@ -52,6 +53,9 @@ public class MainFrame extends JFrame {
         runBtn.setBackground(Color.GREEN);
         runBtn.setForeground(Color.WHITE);
         runBtn.setFont(new Font("Arial", Font.BOLD, 15));
+
+        runBtn.addActionListener(new RunAction());
+
         buttonPanel.setAlignmentX(getAlignmentX());
         buttonPanel.add(runBtn);
 
