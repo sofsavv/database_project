@@ -4,9 +4,9 @@ import app.AppCore;
 import lombok.Data;
 
 import javax.swing.*;
-
 import java.awt.*;
-
+import java.io.File;
+import java.net.URL;
 
 @Data
 public class MainFrame extends JFrame {
@@ -40,7 +40,21 @@ public class MainFrame extends JFrame {
         setPreferredSize(new Dimension(700, 500));
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
+
+//        String fileName = "/resources/run.png";
+//        URL imageURL = getClass().getResource(fileName);
+//        Icon icon = null;
+//
+//        if(imageURL != null){
+//            icon = new ImageIcon(imageURL);
+//        }else{
+//            System.err.println("Resource not found: " + fileName);
+//        }
+
         runBtn = new JButton("RUN");
+        runBtn.setBackground(Color.GREEN);
+        runBtn.setForeground(Color.WHITE);
+        runBtn.setFont(new Font("Arial", Font.BOLD, 15));
         buttonPanel.setAlignmentX(getAlignmentX());
         buttonPanel.add(runBtn);
 
@@ -62,7 +76,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(tableScrollPane, BorderLayout.SOUTH);
 
         add(mainPanel);
-
+        setTitle("SQL to MongoQL converter");
         setVisible(true);
         pack();
 
