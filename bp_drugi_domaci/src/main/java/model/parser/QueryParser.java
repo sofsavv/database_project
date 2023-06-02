@@ -35,6 +35,9 @@ public class QueryParser {
 
             tok = it.next();
 
+            if(tok.equals(""))
+                continue;
+
             if(tok.equalsIgnoreCase("order") && it.hasNext()){
 
                 if(it.next().equalsIgnoreCase("by")){
@@ -56,6 +59,7 @@ public class QueryParser {
             if(!isClause(tok)) {
                 stateManager.getCurrentState().process(tok, false);
             } else {
+
                 AbstractClause clause = stateManager.getCurrentState().process(tok, true);
                 if(clause != null){
                     clauses.add(clause);
