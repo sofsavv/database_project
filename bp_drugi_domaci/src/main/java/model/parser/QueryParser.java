@@ -9,7 +9,11 @@ import java.util.List;
 public class QueryParser {
 
     StateManager stateManager;
-//    List<AbstractClause> clauses;
+    List<AbstractClause> clauses;
+
+    public QueryParser(){
+        clauses = new ArrayList<>();
+    }
 
     public void parse(String query){
 
@@ -18,6 +22,7 @@ public class QueryParser {
 
         if(!tokens.get(0).equalsIgnoreCase("select")){
             // nije pocelo sa SELECT treba neka poruka
+            // TODO validator
         }else{
             stateManager = new StateManager(); // pocinje sa select state
         }
@@ -50,7 +55,12 @@ public class QueryParser {
             }
             if(!isClause(tok))
                 stateManager.getCurrentState().process(tok);
-            else stateManager.getCurrentState().process(tok);
+            else {
+                AbstractClause clause = stateManager.getCurrentState().process(tok);
+                if(clause != null){
+                    clauses.add(clause);
+                }
+            }
         }
     }
 
