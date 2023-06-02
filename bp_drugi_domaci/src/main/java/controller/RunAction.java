@@ -12,7 +12,8 @@ public class RunAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-
+        // uzima text iz text area i prosledjuje ga parseru
+    // trigeruje query parser..
 
     }
 
