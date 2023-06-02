@@ -1,5 +1,8 @@
 package model;
 
 public enum Operators {
-    IN, LIKE, AND, OR, ON, USING
+
+    ASC, DESC,
+    IN, NOT_IN, LIKE, AND, OR, ON, USING,
+    GREATER, LESS, EQUALS, GREATER_EQUALS, LESS_EQUALS, NOT
 }

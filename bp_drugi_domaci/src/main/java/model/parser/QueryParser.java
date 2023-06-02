@@ -17,6 +17,16 @@ public class QueryParser {
 
     public void parse(String query){
 
+        query.replace(","," , ")
+                .replace(">="," greater_equal ")
+                .replace("!="," not ")
+                .replace("<="," less_equal ")
+                .replace("="," equals ")
+                .replace(">"," greater ")
+                .replace("<"," less ")
+                .replace("not in"," not_in ");
+
+        System.out.println("query: " + query);
         List<String> tokens = new ArrayList<>();
         tokens = List.of(query.split(" "));
 
@@ -32,31 +42,29 @@ public class QueryParser {
 
         while (it.hasNext()){
 
-            // edge case
             tok = it.next();
             if(tok.equalsIgnoreCase("order") && it.hasNext()){
 
                 if(it.next().equalsIgnoreCase("by")){
+                    System.out.println("in order by state...");
                     tok = it.next();
                     stateManager.setOrderByState();
-                    stateManager.getCurrentState().process(tok);
-                }else{
-                    // moze da bude neka kolona order a moze i greska???
+                    stateManager.getCurrentState().process(tok, true);
                 }
             }else if(tok.equalsIgnoreCase("group") && it.hasNext()){
 
                 if(it.next().equalsIgnoreCase("by")){
+                    System.out.println("in group by state...");
                     tok = it.next();
                     stateManager.setGroupByState();
-                    stateManager.getCurrentState().process(tok);
-                }else{
-                    // ??????
+                    stateManager.getCurrentState().process(tok, true);
                 }
             }
-            if(!isClause(tok))
-                stateManager.getCurrentState().process(tok);
-            else {
-                AbstractClause clause = stateManager.getCurrentState().process(tok);
+
+            if(!isClause(tok)) {
+                stateManager.getCurrentState().process(tok, false);
+            } else {
+                AbstractClause clause = stateManager.getCurrentState().process(tok, true);
                 if(clause != null){
                     clauses.add(clause);
                 }
@@ -67,16 +75,24 @@ public class QueryParser {
     private boolean isClause(String token){
 
         if(token.equalsIgnoreCase("select")){
+            stateManager.getCurrentState().process(token, true);
             stateManager.setSelectState();
+            System.out.println("start select state...");
             return true;
         }else if(token.equalsIgnoreCase("from")){
+            stateManager.getCurrentState().process(token, true);
             stateManager.setFromState();
+            System.out.println("start from state...");
             return true;
         }else if(token.equalsIgnoreCase("where")){
+            stateManager.getCurrentState().process(token, true);
             stateManager.setWhereState();
+            System.out.println("start where state...");
             return true;
         }else if(token.equalsIgnoreCase("join")){
+            stateManager.getCurrentState().process(token, true);
             stateManager.setJoinState();
+            System.out.println("start join state...");
             return true;
         }
         return false;

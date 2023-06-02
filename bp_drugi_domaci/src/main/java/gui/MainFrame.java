@@ -6,8 +6,6 @@ import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.net.URL;
 
 @Data
 public class MainFrame extends JFrame {
@@ -56,7 +54,6 @@ public class MainFrame extends JFrame {
 
         runBtn.setFont(new Font("Arial", Font.BOLD, 15));
 
-        runBtn.addActionListener(new RunAction());
 
         buttonPanel.setAlignmentX(getAlignmentX());
         buttonPanel.setBackground(Color.decode("#DAD2BC"));
@@ -69,6 +66,9 @@ public class MainFrame extends JFrame {
         textPanel.setBackground(Color.decode("#DAD2BC"));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+
+        runBtn.addActionListener(new RunAction(textArea));
+
         JScrollPane scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -82,12 +82,10 @@ public class MainFrame extends JFrame {
 
         add(mainPanel);
         setTitle("SQL to MongoQL converter");
-        setVisible(true);
+//        setVisible(true);
         pack();
 
-
     }
-
     public void setAppCore(AppCore appCore) {
         this.appCore = appCore;
         this.jTable.setModel(appCore.getTableModel());

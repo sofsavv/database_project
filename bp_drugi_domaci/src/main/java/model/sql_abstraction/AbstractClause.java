@@ -2,6 +2,7 @@ package model.sql_abstraction;
 
 import lombok.Getter;
 import lombok.Setter;
+import model.Operators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.List;
 @Setter
 public abstract class AbstractClause {
 
-    String keyWord;
-    List<String> parameters;
+    private String keyWord;
+    private List<String> parameters;
 
     public AbstractClause(String keyWord){
         this.keyWord = keyWord;

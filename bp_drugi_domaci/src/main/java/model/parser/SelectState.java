@@ -8,23 +8,25 @@ public class SelectState extends ParserState{
     AbstractClause select = null;
 
     @Override
-    public AbstractClause process(String token) {
+    public AbstractClause process(String token, boolean next) {
 
-        //select name, surname from
-        // select name
-        //name,
-        //surname
         if(select == null)
             select = new SelectClause();
 
         if (token.contains(",")) {
             String param = token.substring(0, token.indexOf(","));
             select.getParameters().add(param);
+            System.out.println("param: " + param);
 
-        }else {
+        }else if(!token.equalsIgnoreCase("select") && !next){
             select.getParameters().add(token);
-            return select;
+            System.out.println("param: " + token);
         }
+        return returnClause(next, select);
+    }
+    private AbstractClause returnClause(boolean next, AbstractClause join){
+        if(next)
+            return join;
         return null;
     }
 
