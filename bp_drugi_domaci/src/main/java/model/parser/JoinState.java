@@ -1,6 +1,5 @@
 package model.parser;
 
-import model.Operators;
 import model.sql_abstraction.AbstractClause;
 import model.sql_abstraction.JoinClause;
 
@@ -12,7 +11,7 @@ public class JoinState extends ParserState{
         if(join == null)
             join = new JoinClause();
 
-        if(!token.equalsIgnoreCase("join") && !next){
+        if(!token.equalsIgnoreCase("join") && !next && !token.matches("\\s+")){
             join.getParameters().add(token);
             System.out.println("param: " + token);
         }

@@ -13,14 +13,10 @@ public class SelectState extends ParserState{
         if(select == null)
             select = new SelectClause();
 
-        if (token.contains(",")) {
-            String param = token.substring(0, token.indexOf(","));
+        if(!token.equalsIgnoreCase("select") && !next && !token.matches("\\s+")){
+            String param = token.trim();
             select.getParameters().add(param);
             System.out.println("param: " + param);
-
-        }else if(!token.equalsIgnoreCase("select") && !next){
-            select.getParameters().add(token);
-            System.out.println("param: " + token);
         }
         return returnClause(next, select);
     }

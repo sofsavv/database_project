@@ -17,15 +17,6 @@ public class QueryParser {
 
     public void parse(String query){
 
-        query.replace(","," , ")
-                .replace(">="," greater_equal ")
-                .replace("!="," not ")
-                .replace("<="," less_equal ")
-                .replace("="," equals ")
-                .replace(">"," greater ")
-                .replace("<"," less ")
-                .replace("not in"," not_in ");
-
         System.out.println("query: " + query);
         List<String> tokens = new ArrayList<>();
         tokens = List.of(query.split(" "));
@@ -43,6 +34,7 @@ public class QueryParser {
         while (it.hasNext()){
 
             tok = it.next();
+
             if(tok.equalsIgnoreCase("order") && it.hasNext()){
 
                 if(it.next().equalsIgnoreCase("by")){

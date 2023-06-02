@@ -19,7 +19,14 @@ public class RunAction implements ActionListener {
 
         QueryParser parser = new QueryParser();
         String query = textArea.getText();
-        parser.parse(query);
+        parser.parse(query.replace(","," , ")
+                .replace(">="," greater_equal ")
+                .replace("!="," not ")
+                .replace("<="," less_equal ")
+                .replace("="," equals ")
+                .replace(">"," greater ")
+                .replace("<"," less ")
+                .replace("not in"," not_in "));
 
     }
 

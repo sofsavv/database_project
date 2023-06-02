@@ -2,7 +2,6 @@ package model.parser;
 
 import model.sql_abstraction.AbstractClause;
 import model.sql_abstraction.GroupByClause;
-import model.sql_abstraction.OrderByClause;
 
 public class GroupByState extends ParserState{
     AbstractClause group_by = null;
@@ -11,7 +10,7 @@ public class GroupByState extends ParserState{
         if(group_by == null)
             group_by = new GroupByClause();
 
-        if(!token.equalsIgnoreCase("group_by") && !next){
+        if(!token.equalsIgnoreCase("group_by") && !next && !token.matches("\\s+")){
             group_by.getParameters().add(token);
             System.out.println("param: " + token);
         }

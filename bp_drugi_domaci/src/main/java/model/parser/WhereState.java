@@ -1,7 +1,6 @@
 package model.parser;
 
 import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.OrderByClause;
 import model.sql_abstraction.WhereClause;
 
 public class WhereState extends ParserState{
@@ -11,7 +10,7 @@ public class WhereState extends ParserState{
         if(where == null)
             where = new WhereClause();
 
-        if(!token.equalsIgnoreCase("where") && !next){
+        if(!token.equalsIgnoreCase("where") && !next && !token.matches("\\s+")){
             where.getParameters().add(token);
             System.out.println("param: " + token);
         }

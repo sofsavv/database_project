@@ -1,7 +1,6 @@
 package model.parser;
 
 import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.JoinClause;
 import model.sql_abstraction.OrderByClause;
 
 public class OrderByState extends ParserState{
@@ -12,7 +11,7 @@ public class OrderByState extends ParserState{
         if(order_by == null)
             order_by = new OrderByClause();
 
-        if(!token.equalsIgnoreCase("order_by") && !next){
+        if(!token.equalsIgnoreCase("order_by") && !next && !token.matches("\\s+")){
             order_by.getParameters().add(token);
             System.out.println("param: " + token);
         }

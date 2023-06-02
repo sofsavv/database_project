@@ -14,11 +14,7 @@ public class FromState extends ParserState{
         if(from == null)
             from = new FromClause();
 
-        if (token.contains(",")) {
-            String param = token.substring(0, token.indexOf(","));
-            from.getParameters().add(param);
-            System.out.println("param: " + param);
-        }else if(!token.equalsIgnoreCase("from") && !next){
+        if(!token.equalsIgnoreCase("from") && !next && !token.matches("\\s+")){
             from.getParameters().add(token);
             System.out.println("param: " + token);
         }
