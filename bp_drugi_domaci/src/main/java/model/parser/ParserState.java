@@ -1,7 +1,9 @@
 package model.parser;
 
+import model.sql_abstraction.AbstractClause;
+
 public abstract class ParserState {
 
-    public abstract void process(String token);
+    public abstract AbstractClause process(String token);
 
 }

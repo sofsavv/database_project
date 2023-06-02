@@ -8,26 +8,24 @@ public class SelectState extends ParserState{
     AbstractClause select = null;
 
     @Override
-    public void process(String token) {
+    public AbstractClause process(String token) {
 
+        //select name, surname from
+        // select name
+        //name,
+        //surname
         if(select == null)
             select = new SelectClause();
 
         if (token.contains(",")) {
-            String[] columns = token.split(",");
+            String param = token.substring(0, token.indexOf(","));
+            select.getParameters().add(param);
 
-            for (String c : columns) {
-                String trimmedColumn = c.trim();
-                select.getParameters().add(trimmedColumn);
-            }
-        }else if(token.equals("*")){
+        }else {
             select.getParameters().add(token);
-
-        } else {
-            String trimmedColumn = token.trim();
-            select.getParameters().add(trimmedColumn);
+            return select;
         }
-
+        return null;
     }
 
 }

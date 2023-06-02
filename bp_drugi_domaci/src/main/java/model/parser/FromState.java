@@ -5,9 +5,10 @@ import model.sql_abstraction.FromClause;
 
 public class FromState extends ParserState{
     @Override
-    public void process(String token) {
+    public AbstractClause process(String token) {
         // jer posle from moze samo jedna tabela
         AbstractClause from = new FromClause();
         from.getParameters().add(token);
+        return from;
     }
 }

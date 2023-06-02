@@ -85,6 +85,7 @@ public class MainFrame extends JFrame {
         setVisible(true);
         pack();
 
+
     }
 
     public void setAppCore(AppCore appCore) {
