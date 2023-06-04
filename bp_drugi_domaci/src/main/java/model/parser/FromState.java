@@ -7,7 +7,7 @@ public class FromState extends ParserState{
 
     AbstractClause from;
     @Override
-    public AbstractClause process(String token, boolean next) {
+    public AbstractClause process(String token, boolean next, boolean bracket) {
 
         // moze po zarezu i onda je isto kao da pise sa join gde su iste kolone tabela
 
@@ -20,9 +20,5 @@ public class FromState extends ParserState{
         }
         return returnClause(next, from);
     }
-    private AbstractClause returnClause(boolean next, AbstractClause join){
-        if(next)
-            return join;
-        return null;
-    }
+
 }

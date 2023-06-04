@@ -1,10 +1,10 @@
 package model.sql_abstraction;
 
-import model.Operators;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Getter
+@Setter
 public class WhereClause extends AbstractClause{
     public WhereClause() {
         super("where");
