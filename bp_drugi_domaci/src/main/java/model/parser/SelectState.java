@@ -8,7 +8,7 @@ public class SelectState extends ParserState{
     AbstractClause select = null;
 
     @Override
-    public AbstractClause process(String token, boolean next) {
+    public AbstractClause process(String token, boolean next, boolean bracket) {
 
         if(select == null)
             select = new SelectClause();
@@ -19,11 +19,6 @@ public class SelectState extends ParserState{
             System.out.println("param: " + param);
         }
         return returnClause(next, select);
-    }
-    private AbstractClause returnClause(boolean next, AbstractClause join){
-        if(next)
-            return join;
-        return null;
     }
 
 }

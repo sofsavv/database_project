@@ -6,7 +6,7 @@ import model.sql_abstraction.OrderByClause;
 public class OrderByState extends ParserState{
 
     AbstractClause order_by = null;
-    public AbstractClause process(String token, boolean next) {
+    public AbstractClause process(String token, boolean next, boolean bracket) {
 
         if(order_by == null)
             order_by = new OrderByClause();
@@ -18,9 +18,4 @@ public class OrderByState extends ParserState{
         return returnClause(next, order_by);
     }
 
-    private AbstractClause returnClause(boolean next, AbstractClause order_by){
-        if(next)
-            return order_by;
-        return null;
-    }
 }

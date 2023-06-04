@@ -13,6 +13,7 @@ public abstract class AbstractClause {
 
     private String keyWord;
     private List<String> parameters;
+    private String temp;
 
     public AbstractClause(String keyWord){
         this.keyWord = keyWord;

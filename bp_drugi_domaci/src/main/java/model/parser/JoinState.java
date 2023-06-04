@@ -6,7 +6,7 @@ import model.sql_abstraction.JoinClause;
 public class JoinState extends ParserState{
     AbstractClause join = null;
     @Override
-    public AbstractClause process(String token, boolean next) {
+    public AbstractClause process(String token, boolean next, boolean bracket) {
 
         if(join == null)
             join = new JoinClause();
@@ -16,12 +16,6 @@ public class JoinState extends ParserState{
             System.out.println("param: " + token);
         }
         return returnClause(next, join);
-    }
-
-    private AbstractClause returnClause(boolean next, AbstractClause join){
-        if(next)
-            return join;
-        return null;
     }
 
 }

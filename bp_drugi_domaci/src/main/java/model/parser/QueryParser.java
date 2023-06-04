@@ -5,7 +5,6 @@ import lombok.Setter;
 import model.sql_abstraction.AbstractClause;
 import model.validator.*;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +19,7 @@ public class QueryParser {
     Rule groupBySelectionRule = new GroupBySelectionRule();
     Rule tableJoinRule = new TableJoinRule();
     Rule agregationRule = new AgregationRule();
-    int flag = -1;
+    boolean subquery = false;
 
     public QueryParser(){
         clauses = new ArrayList<>();
@@ -38,7 +37,7 @@ public class QueryParser {
         rules.add(tableJoinRule);
         rules.add(agregationRule);
 
-        stateManager = new StateManager(); // pocinje sa select state
+        stateManager = new StateManager();
 
         Iterator<String> it = tokens.iterator();
         String tok;
@@ -46,40 +45,29 @@ public class QueryParser {
         while (it.hasNext()){
 
             tok = it.next();
-
             if(tok.equals(""))
                 continue;
 
-//            if(tok.equalsIgnoreCase("order") && it.hasNext()){
-//
-//                if(it.next().equalsIgnoreCase("by")){
-//                    System.out.println("in order by state...");
-//                    flag = 1;
-//                    tok = it.next();
-//                    stateManager.setOrderByState();
-//                    stateManager.getCurrentState().process(tok, true);
-//                }
-//            }else if(tok.equalsIgnoreCase("group") && it.hasNext()){
-//                if(it.next().equalsIgnoreCase("by")){
-//                    System.out.println("in group by state...");
-//                    flag = 0;
-//                    tok = it.next();
-//                    stateManager.setGroupByState();
-//                    stateManager.getCurrentState().process(tok, true);
-//                }
-//            }
+            // subquery
+            if(tok.endsWith(")") && !isAggregation(tok) && subquery){
+                subquery = false;
+                stateManager.getCurrentState().process(tok, false, true);
+                System.out.println("token sa ) " + tok);
 
-            if(!isClause(tok)) {
-                stateManager.getCurrentState().process(tok, false);
+            }else if(tok.startsWith("(")  || subquery){
+                subquery = true;
+                stateManager.getCurrentState().process(tok, false, true);
+
+            } else if(!isClause(tok)) {
+                stateManager.getCurrentState().process(tok, false, false);
             } else {
-                AbstractClause clause = stateManager.getCurrentState().process(tok, true);
+                AbstractClause clause = stateManager.getCurrentState().process(tok, true, false);
                 if(clause != null){
                     clauses.add(clause);
                 }
             }
-
         }
-
+        System.out.println("izlistane klauze");
         for(AbstractClause c: clauses){
             System.out.println(c.getKeyWord());
             for (String s: c.getParameters()){
@@ -87,7 +75,7 @@ public class QueryParser {
             }
         }
 
-        checkRules(clauses);
+//        checkRules(clauses);
     }
 
 
@@ -107,37 +95,45 @@ public class QueryParser {
     private boolean isClause(String token){
 
         if(token.equalsIgnoreCase("select")){
-            stateManager.getCurrentState().process(token, true);
+            stateManager.getCurrentState().process(token, true, false);
             stateManager.setSelectState();
             System.out.println("start select state...");
             return true;
         }else if(token.equalsIgnoreCase("from")){
-            stateManager.getCurrentState().process(token, true);
+            stateManager.getCurrentState().process(token, true, false);
             stateManager.setFromState();
             System.out.println("start from state...");
             return true;
         }else if(token.equalsIgnoreCase("where")){
-            stateManager.getCurrentState().process(token, true);
+            stateManager.getCurrentState().process(token, true, false);
             stateManager.setWhereState();
             System.out.println("start where state...");
             return true;
         }else if(token.equalsIgnoreCase("join")){
-            stateManager.getCurrentState().process(token, true);
+            stateManager.getCurrentState().process(token, true, false);
             stateManager.setJoinState();
             System.out.println("start join state...");
             return true;
         }else if(token.equalsIgnoreCase("group_by")){
-            stateManager.getCurrentState().process(token, true);
+            stateManager.getCurrentState().process(token, true, false);
             stateManager.setGroupByState();
             System.out.println("start group_by state..");
             return true;
         }else if(token.equalsIgnoreCase("order_by")){
-            stateManager.getCurrentState().process(token, true);
+            stateManager.getCurrentState().process(token, true, false);
             stateManager.setOrderByState();
             System.out.println("start order_by state..");
             return true;
         }
         return false;
+    }
+
+    private boolean isAggregation(String param){
+        return (param.contains("avg(") && param.endsWith(")"))
+                || (param.contains("sum(") && param.endsWith(")"))
+                || (param.contains("min(") && param.endsWith(")"))
+                || (param.contains("max(") && param.endsWith(")"))
+                || (param.contains("count(") && param.endsWith(")"));
     }
 
 }

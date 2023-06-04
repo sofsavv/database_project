@@ -5,7 +5,7 @@ import model.sql_abstraction.GroupByClause;
 
 public class GroupByState extends ParserState{
     AbstractClause group_by = null;
-    public AbstractClause process(String token, boolean next) {
+    public AbstractClause process(String token, boolean next, boolean bracket) {
 
         if(group_by == null)
             group_by = new GroupByClause();
@@ -17,9 +17,4 @@ public class GroupByState extends ParserState{
         return returnClause(next, group_by);
     }
 
-    private AbstractClause returnClause(boolean next, AbstractClause group_by){
-        if(next)
-            return group_by;
-        return null;
-    }
 }
