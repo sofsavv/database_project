@@ -5,6 +5,7 @@ import model.parser.QueryParser;
 import model.sql_abstraction.AbstractClause;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuerySyntaxRule extends Rule{
@@ -17,31 +18,38 @@ public class QuerySyntaxRule extends Rule{
     public boolean validateQuery(List<AbstractClause> query) {
 
         boolean selectFlag = false;
-        boolean paramsInBetween = false;
+        boolean fromFlag = false;
+        boolean groupByFlag = false;
 
-
+        List<String> selectParams = new ArrayList<>();
         for(AbstractClause clause: query){
-
-            if(clause.getKeyWord().equalsIgnoreCase("select")){
-                selectFlag = true;
-                if(clause.getParameters().size() > 0)
-                    paramsInBetween = true;
+            System.out.println("rec "  + clause.getKeyWord());
+            switch (clause.getKeyWord()){
+                case "select":selectFlag =  true; selectParams.addAll(clause.getParameters());break;
+                case "from":fromFlag = true; break;
+                case "group by": groupByFlag = true; break;
             }
 
-
+            if(clause.getParameters().size() == 0)
+                   JOptionPane.showMessageDialog(MainFrame.getInstance(), "Missing params inbetween keywords.");
         }
+
         if(!selectFlag) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Query must contain SELECT clause");
-            MainFrame.getInstance().getTextArea().setText("");
-            return false;
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Query must contain SELECT clause.");
         }
-
-        if(!paramsInBetween) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Missing params inbetween keywords.");
-            MainFrame.getInstance().getTextArea().setText("");
-
-            return false;
+        if(!fromFlag){
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Query must contain FROM clause.");
         }
-        return true;
+        System.out.println("Group by " + groupByFlag);
+        if(groupByFlag){
+            System.out.println("parametri " + selectParams);
+            if(!selectParams.contains("avg(") || !selectParams.contains("sum(") || !selectParams.contains("min(") || !selectParams.contains("max(") || !selectParams.contains("count("))
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "No agregation function for GROUP BY clause.");
+        }else
+            return true;
+
+        return false;
     }
 }
+
+

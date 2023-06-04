@@ -8,6 +8,6 @@ public class AgregationRule extends Rule{
 
     @Override
     public boolean validateQuery(List<AbstractClause> query) {
-        return false;
+        return true;
     }
 }

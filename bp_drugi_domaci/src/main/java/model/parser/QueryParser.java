@@ -58,11 +58,14 @@ public class QueryParser {
                     stateManager.getCurrentState().process(tok, true);
                 }
             }else if(tok.equalsIgnoreCase("group") && it.hasNext()){
-
                 if(it.next().equalsIgnoreCase("by")){
                     System.out.println("in group by state...");
+
                     tok = it.next();
                     stateManager.setGroupByState();
+                    AbstractClause clause = stateManager.getCurrentState().process(tok, true);
+                    clauses.add(clause);
+
                     stateManager.getCurrentState().process(tok, true);
                 }
             }
@@ -82,8 +85,16 @@ public class QueryParser {
 
 
     private void checkRules(List<AbstractClause> clauses){
-        for(Rule rule: rules)
-            rule.validateQuery(clauses);
+        boolean check = false;
+        for(Rule rule: rules) {
+            if(!rule.validateQuery(clauses)){
+            //TODO: prekidanje programa tj ne saljemo upit dalje nego opet cekamo input.
+                System.out.println("Greskaaa kraj. ");
+                return;
+            }
+        }
+        //TODO: ako validateQuery vrati zavrsi petlju, znaci da nije doslo do greske
+        // i saljemo upit Adapteru.
     }
 
     private boolean isClause(String token){

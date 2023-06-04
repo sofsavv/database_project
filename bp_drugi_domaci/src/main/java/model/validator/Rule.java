@@ -9,10 +9,7 @@ public abstract class Rule {
     private String ruleName;
     private String errorMessage;
 
-    public Rule() {
-        this.ruleName = ruleName;
-        this.errorMessage = errorMessage;
-    }
+    public Rule() {}
 
     public abstract boolean validateQuery(List<AbstractClause> query);
 
