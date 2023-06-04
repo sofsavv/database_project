@@ -20,6 +20,7 @@ public class QueryParser {
     Rule groupBySelectionRule = new GroupBySelectionRule();
     Rule tableJoinRule = new TableJoinRule();
     Rule agregationRule = new AgregationRule();
+    int flag = -1;
 
     public QueryParser(){
         clauses = new ArrayList<>();
@@ -49,26 +50,24 @@ public class QueryParser {
             if(tok.equals(""))
                 continue;
 
-            if(tok.equalsIgnoreCase("order") && it.hasNext()){
-
-                if(it.next().equalsIgnoreCase("by")){
-                    System.out.println("in order by state...");
-                    tok = it.next();
-                    stateManager.setOrderByState();
-                    stateManager.getCurrentState().process(tok, true);
-                }
-            }else if(tok.equalsIgnoreCase("group") && it.hasNext()){
-                if(it.next().equalsIgnoreCase("by")){
-                    System.out.println("in group by state...");
-
-                    tok = it.next();
-                    stateManager.setGroupByState();
-                    AbstractClause clause = stateManager.getCurrentState().process(tok, true);
-                    clauses.add(clause);
-
-                    stateManager.getCurrentState().process(tok, true);
-                }
-            }
+//            if(tok.equalsIgnoreCase("order") && it.hasNext()){
+//
+//                if(it.next().equalsIgnoreCase("by")){
+//                    System.out.println("in order by state...");
+//                    flag = 1;
+//                    tok = it.next();
+//                    stateManager.setOrderByState();
+//                    stateManager.getCurrentState().process(tok, true);
+//                }
+//            }else if(tok.equalsIgnoreCase("group") && it.hasNext()){
+//                if(it.next().equalsIgnoreCase("by")){
+//                    System.out.println("in group by state...");
+//                    flag = 0;
+//                    tok = it.next();
+//                    stateManager.setGroupByState();
+//                    stateManager.getCurrentState().process(tok, true);
+//                }
+//            }
 
             if(!isClause(tok)) {
                 stateManager.getCurrentState().process(tok, false);
@@ -80,6 +79,14 @@ public class QueryParser {
             }
 
         }
+
+        for(AbstractClause c: clauses){
+            System.out.println(c.getKeyWord());
+            for (String s: c.getParameters()){
+                System.out.println("param: " + s);
+            }
+        }
+
         checkRules(clauses);
     }
 
@@ -118,6 +125,16 @@ public class QueryParser {
             stateManager.getCurrentState().process(token, true);
             stateManager.setJoinState();
             System.out.println("start join state...");
+            return true;
+        }else if(token.equalsIgnoreCase("group_by")){
+            stateManager.getCurrentState().process(token, true);
+            stateManager.setGroupByState();
+            System.out.println("start group_by state..");
+            return true;
+        }else if(token.equalsIgnoreCase("order_by")){
+            stateManager.getCurrentState().process(token, true);
+            stateManager.setOrderByState();
+            System.out.println("start order_by state..");
             return true;
         }
         return false;

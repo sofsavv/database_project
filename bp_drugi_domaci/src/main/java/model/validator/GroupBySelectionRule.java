@@ -45,7 +45,7 @@ public class GroupBySelectionRule extends Rule{
 
         return true;
     }
-
+// avg(ii)
     public boolean checkAgregation(String param){
         return param.contains("avg(") || param.contains("sum(") || param.contains("min(") || param.contains("max(") || param.contains("count(");
     }

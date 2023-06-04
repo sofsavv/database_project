@@ -18,9 +18,9 @@ public class OrderByState extends ParserState{
         return returnClause(next, order_by);
     }
 
-    private AbstractClause returnClause(boolean next, AbstractClause join){
+    private AbstractClause returnClause(boolean next, AbstractClause order_by){
         if(next)
-            return join;
+            return order_by;
         return null;
     }
 }

@@ -17,9 +17,9 @@ public class GroupByState extends ParserState{
         return returnClause(next, group_by);
     }
 
-    private AbstractClause returnClause(boolean next, AbstractClause join){
+    private AbstractClause returnClause(boolean next, AbstractClause group_by){
         if(next)
-            return join;
+            return group_by;
         return null;
     }
 }

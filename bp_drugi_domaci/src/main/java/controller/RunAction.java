@@ -26,7 +26,9 @@ public class RunAction implements ActionListener {
                 .replace("="," equals ")
                 .replace(">"," greater ")
                 .replace("<"," less ")
-                .replace("not in"," not_in "));
+                .replace("not in"," not_in ")
+                .replace("group by", "group_by")
+                .replace("order by", "order_by"));
 
     }
 
