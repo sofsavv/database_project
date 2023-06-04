@@ -1,15 +1,25 @@
 package model.parser;
 
+import lombok.Getter;
+import lombok.Setter;
 import model.sql_abstraction.AbstractClause;
+import model.validator.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+@Getter
+@Setter
 public class QueryParser {
 
     StateManager stateManager;
     List<AbstractClause> clauses;
+    List<Rule> rules;
+    Rule querySyntaxRule = new QuerySyntaxRule();
+    Rule groupBySelectionRule = new GroupBySelectionRule();
+    Rule tableJoinRule = new TableJoinRule();
+    Rule agregationRule = new AgregationRule();
 
     public QueryParser(){
         clauses = new ArrayList<>();
@@ -21,12 +31,13 @@ public class QueryParser {
         List<String> tokens = new ArrayList<>();
         tokens = List.of(query.split(" "));
 
-        if(!tokens.get(0).equalsIgnoreCase("select")){
-            // nije pocelo sa SELECT treba neka poruka
-            // TODO validator
-        }else{
-            stateManager = new StateManager(); // pocinje sa select state
-        }
+        rules = new ArrayList<>();
+        rules.add(querySyntaxRule);
+        rules.add(groupBySelectionRule);
+        rules.add(tableJoinRule);
+        rules.add(agregationRule);
+
+        stateManager = new StateManager(); // pocinje sa select state
 
         Iterator<String> it = tokens.iterator();
         String tok;
@@ -47,11 +58,14 @@ public class QueryParser {
                     stateManager.getCurrentState().process(tok, true);
                 }
             }else if(tok.equalsIgnoreCase("group") && it.hasNext()){
-
                 if(it.next().equalsIgnoreCase("by")){
                     System.out.println("in group by state...");
+
                     tok = it.next();
                     stateManager.setGroupByState();
+                    AbstractClause clause = stateManager.getCurrentState().process(tok, true);
+                    clauses.add(clause);
+
                     stateManager.getCurrentState().process(tok, true);
                 }
             }
@@ -59,13 +73,28 @@ public class QueryParser {
             if(!isClause(tok)) {
                 stateManager.getCurrentState().process(tok, false);
             } else {
-
                 AbstractClause clause = stateManager.getCurrentState().process(tok, true);
                 if(clause != null){
                     clauses.add(clause);
                 }
             }
+
         }
+        checkRules(clauses);
+    }
+
+
+    private void checkRules(List<AbstractClause> clauses){
+        boolean check = false;
+        for(Rule rule: rules) {
+            if(!rule.validateQuery(clauses)){
+            //TODO: prekidanje programa tj ne saljemo upit dalje nego opet cekamo input.
+                System.out.println("Greskaaa kraj. ");
+                return;
+            }
+        }
+        //TODO: ako validateQuery vrati zavrsi petlju, znaci da nije doslo do greske
+        // i saljemo upit Adapteru.
     }
 
     private boolean isClause(String token){
