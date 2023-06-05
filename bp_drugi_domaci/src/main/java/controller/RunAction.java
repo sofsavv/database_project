@@ -54,7 +54,6 @@ public class RunAction implements ActionListener {
                 .replace("group by", "group_by")
                 .replace("order by", "order_by"));
 
-
         Mapper mapper = new Mapper(parser.getClauses());
         mapper.map();
         checkRules(clauses);

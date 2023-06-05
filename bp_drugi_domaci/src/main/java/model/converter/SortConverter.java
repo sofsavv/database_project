@@ -20,7 +20,7 @@ public class SortConverter extends ParameterConverter{
 
             if(param.equalsIgnoreCase("asc")){
                 sb.append(": 1");
-            }else if(param.equalsIgnoreCase("desc")){
+            }else if(param.equalsIgnoreCase("dsc")){
                 sb.append(": -1");
             }else sb.append(param);
         }

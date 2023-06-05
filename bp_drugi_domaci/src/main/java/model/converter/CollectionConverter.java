@@ -10,7 +10,7 @@ public class CollectionConverter extends ParameterConverter{
 
     @Override
     public String translate() {
-        String collection = "db." + this.getClause().getParameters().get(0);
+        String collection = this.getClause().getParameters().get(0);
         System.out.println("from: " + collection);
         return collection;
     }

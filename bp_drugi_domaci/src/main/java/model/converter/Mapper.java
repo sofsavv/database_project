@@ -10,10 +10,10 @@ import java.util.List;
 public class Mapper {
 
     List<AbstractClause> clauses;
-    String projection;
-    String collection;
-    String find;
-    String sort;
+    String projection = "{}";
+    String collection = "{}";
+    String find = "{}";
+    String sort = "{}";
 
     public Mapper(List<AbstractClause> clauses){
         this.clauses = clauses;
@@ -27,26 +27,26 @@ public class Mapper {
         for(AbstractClause clause: clauses){
 
             if(clause instanceof SelectClause){
-                ParameterConverter projection = new ProjectionConverter(clause);
-                projection.translate();
+                ParameterConverter projectionConverter = new ProjectionConverter(clause);
+                projection = projectionConverter.translate();
             }else if(clause instanceof FromClause){
-                ParameterConverter collection = new CollectionConverter(clause);
-                collection.translate();
+                ParameterConverter collectionConverter = new CollectionConverter(clause);
+                collection = collectionConverter.translate();
             }else if(clause instanceof WhereClause){
-                ParameterConverter find = new FindConverter(clause);
-                find.translate();
+                ParameterConverter findConverter = new FindConverter(clause);
+                find = findConverter.translate();
             }else if(clause instanceof OrderByClause){
-                ParameterConverter sort = new SortConverter(clause);
-                sort.translate();
+                ParameterConverter sortConverter = new SortConverter(clause);
+                sort = sortConverter.translate();
             }
 
         }
 
-//        cursor = mongoDB.getDatabase().getCollection(collection)
-//                .find(Document.parse(find))
-//                .projection(Document.parse(projection))
-//                .sort(Document.parse(sort))
-//                .iterator();
+        cursor = mongoDB.getDatabase().getCollection(collection)
+                .find(Document.parse(find))
+                .projection(Document.parse(projection))
+                .sort(Document.parse(sort))
+                .iterator();
 
         return cursor;
     }

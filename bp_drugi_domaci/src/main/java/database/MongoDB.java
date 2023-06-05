@@ -15,7 +15,6 @@ import java.util.List;
 public class MongoDB implements Database{
 
     private MongoClient connection;
-    private MongoDatabase database;
     List<Row> rows;
 
     public MongoDB(){

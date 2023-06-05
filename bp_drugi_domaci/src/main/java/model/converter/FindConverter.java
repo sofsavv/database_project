@@ -63,7 +63,7 @@ public class FindConverter extends ParameterConverter{
 
         find = sb.toString();
         System.out.println("where: " + find);
-        find = find.substring(0, find.lastIndexOf(","));
+//        find = find.substring(0, find.lastIndexOf(","));
         return find;
     }
 
