@@ -13,7 +13,7 @@ public class OrderByState extends ParserState{
 
         if(!token.equalsIgnoreCase("order_by") && !next && !token.matches("\\s+")){
             order_by.getParameters().add(token);
-            System.out.println("param: " + token);
+//            System.out.println("param: " + token);
         }
         return returnClause(next, order_by);
     }

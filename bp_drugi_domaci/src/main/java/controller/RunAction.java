@@ -1,5 +1,6 @@
 package controller;
 
+import model.converter.Mapper;
 import model.parser.QueryParser;
 
 import javax.swing.*;
@@ -20,15 +21,18 @@ public class RunAction implements ActionListener {
         QueryParser parser = new QueryParser();
         String query = textArea.getText();
         parser.parse(query.replace(","," , ")
-                .replace(">="," greater_equal ")
-                .replace("!="," not ")
-                .replace("<="," less_equal ")
-                .replace("="," equals ")
-                .replace(">"," greater ")
-                .replace("<"," less ")
+                .replace(">="," $gte ")
+                .replace("!="," $ne ")
+                .replace("<="," $lte ")
+                .replace("="," $eq ")
+                .replace(">"," $gt ")
+                .replace("<"," $lt ")
                 .replace("not in"," not_in ")
                 .replace("group by", "group_by")
                 .replace("order by", "order_by"));
+
+        Mapper mapper = new Mapper(parser.getClauses());
+        mapper.map();
     }
 
 }

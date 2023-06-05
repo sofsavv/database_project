@@ -28,7 +28,7 @@ public class WhereState extends ParserState{
 
         }else if(!token.equalsIgnoreCase("where") && !next && !token.matches("\\s+")){
             where.getParameters().add(token);
-            System.out.println("param: " + token);
+//            System.out.println("param: " + token);
         }
 //        else if(token.equalsIgnoreCase("where")){
 //            next = false;

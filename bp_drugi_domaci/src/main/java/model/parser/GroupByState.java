@@ -12,7 +12,7 @@ public class GroupByState extends ParserState{
 
         if(!token.equalsIgnoreCase("group_by") && !next && !token.matches("\\s+")){
             group_by.getParameters().add(token);
-            System.out.println("param: " + token);
+//            System.out.println("param: " + token);
         }
         return returnClause(next, group_by);
     }
