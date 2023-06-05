@@ -21,6 +21,7 @@ public class GroupBySelectionRule extends Rule{
 
         List<String> selectParams = new ArrayList<>();
         List<String> groupByParams = new ArrayList<>();
+        groupByParams.add(",");
 
             if(containsGroupByClause){
                 for(AbstractClause clause: query){
@@ -32,22 +33,29 @@ public class GroupBySelectionRule extends Rule{
             }else{
                 return true;
             }
-
+        System.out.println("Group by parametri " + groupByParams);
+            boolean valid = false;
+        //select name, salary, avg(age) from gr group by name
+        //select name ,  s ,  avg(s) from hr group_by name ,
             for(String param: selectParams){
                 if(!checkAgregation(param)){
-                    if(!groupByParams.contains(param)){
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid GROUP BY syntax.");
-                        return false;
+                    for(String groupParams: groupByParams){
+                        if(groupParams.equalsIgnoreCase(param)){
+                            valid = true;
+                        }
                     }
+                    if(!valid){
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(),"All params from SELECT clause must be under GROUP BY clasue");
+                        return false;
+                    }else
+                        valid = false;
                 }
             }
 
 
         return true;
     }
-// avg(ii)
-    public boolean checkAgregation(String param){
-        return param.contains("avg(") || param.contains("sum(") || param.contains("min(") || param.contains("max(") || param.contains("count(");
-    }
+
+
 
 }

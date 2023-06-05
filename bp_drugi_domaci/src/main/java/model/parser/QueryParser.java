@@ -75,7 +75,7 @@ public class QueryParser {
             }
         }
 
-//        checkRules(clauses);
+        checkRules(clauses);
     }
 
 

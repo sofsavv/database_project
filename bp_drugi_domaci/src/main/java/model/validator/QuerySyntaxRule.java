@@ -23,7 +23,7 @@ public class QuerySyntaxRule extends Rule{
 
         List<String> selectParams = new ArrayList<>();
         for(AbstractClause clause: query){
-            System.out.println("rec "  + clause.getKeyWord());
+
             switch (clause.getKeyWord()){
                 case "select":selectFlag =  true; selectParams.addAll(clause.getParameters());break;
                 case "from":fromFlag = true; break;
@@ -40,15 +40,26 @@ public class QuerySyntaxRule extends Rule{
         if(!fromFlag){
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Query must contain FROM clause.");
         }
-        System.out.println("Group by " + groupByFlag);
+
+        boolean isAgg = false;
         if(groupByFlag){
             System.out.println("parametri " + selectParams);
-            if(!selectParams.contains("avg(") || !selectParams.contains("sum(") || !selectParams.contains("min(") || !selectParams.contains("max(") || !selectParams.contains("count("))
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "No agregation function for GROUP BY clause.");
+            for(String param: selectParams){
+                if(checkAgregation(param)){
+                    isAgg = true;
+                    break;
+                }
+            }
+            if(!isAgg) {
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "No agregation function for GROUP BY clause");
+                return false;
+            }else {
+                return true;
+            }
+
         }else
             return true;
 
-        return false;
     }
 }
 
