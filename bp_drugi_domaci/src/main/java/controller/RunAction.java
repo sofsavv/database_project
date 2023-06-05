@@ -62,11 +62,11 @@ public class RunAction implements ActionListener {
         boolean sq = false;
         for(AbstractClause clause: clauses){
             if(clause.getKeyWord().equalsIgnoreCase("where")){
-                sq = true;
-                for(String whereParams: clause.getParameters()){
 
+                for(String whereParams: clause.getParameters()){
 //         salary in (select department j)
                     if(whereParams.contains("select")){
+                        sq = true;
                         int start = whereParams.indexOf("(");
                         int end = whereParams.lastIndexOf(")");
                         subQuery = whereParams.substring(start+1, end);
@@ -79,7 +79,6 @@ public class RunAction implements ActionListener {
             if(subQuery != null)
                 subquery = parser1.parse(subQuery);
             checkRules(subquery);
-
         }
 
     }

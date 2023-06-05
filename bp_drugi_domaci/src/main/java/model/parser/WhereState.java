@@ -11,22 +11,24 @@ public class WhereState extends ParserState{
         if(where == null)
             where = new WhereClause();
 
-        if(!token.equalsIgnoreCase("where") && bracket){
+//select department_name from hr.departments where manager_id in
+//    (select employee_id from hr.employees where last_name like 'h%')
+        if(bracket){
 
-            if(token.contains(")") && !isAggregation(token)){
+            if(token.contains(")") && !isAggregation(token)) {
+
                 sb.append(token);
                 where.setTemp(sb.toString());
                 where.getParameters().add(where.getTemp());
 
-                System.out.println("temp na kraju: "+where.getTemp());
+                System.out.println("temp na kraju: " + where.getTemp());
 
                 where.setTemp("");
                 bracket = false;
                 sb.deleteCharAt(0);
-                sb.deleteCharAt(sb.length()-1);
-//                qp.parse(sb.toString());
-
-            }else{
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            else{
                 sb.append(token);
                 sb.append(" ");
             }
