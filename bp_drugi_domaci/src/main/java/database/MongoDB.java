@@ -23,6 +23,11 @@ public class MongoDB implements Database{
     }
 
     @Override
+    public MongoDatabase getDatabase() {
+        return connection.getDatabase("bp_tim35");
+    }
+
+    @Override
     public List<Row> getDataFromTable(String from) {
 
         Row row = new Row();

@@ -16,7 +16,7 @@ public class SelectState extends ParserState{
         if(!token.equalsIgnoreCase("select") && !next && !token.matches("\\s+")){
             String param = token.trim();
             select.getParameters().add(param);
-            System.out.println("param: " + param);
+//            System.out.println("param: " + param);
         }
         return returnClause(next, select);
     }

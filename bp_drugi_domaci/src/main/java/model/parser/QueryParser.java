@@ -32,14 +32,13 @@ public class QueryParser {
         while (it.hasNext()){
 
             tok = it.next();
+
             if(tok.equals(""))
                 continue;
 
-            // subquery
             if(tok.endsWith(")") && !isAggregation(tok) && subquery){
                 subquery = false;
                 stateManager.getCurrentState().process(tok, false, true);
-                System.out.println("token sa ) " + tok);
 
             }else if(tok.startsWith("(")  || subquery){
                 subquery = true;
@@ -64,18 +63,13 @@ public class QueryParser {
                 System.out.println("param: " + s);
             }
         }
-    return clauses;
-
+        return clauses;
     }
-
-
-
 
     private boolean isClause(String token){
 
         if(token.equalsIgnoreCase("select")){
             stateManager.getCurrentState().process(token, true, false);
-//            stateManager.getCurrentState()
             stateManager.setSelectState();
             System.out.println("start select state...");
             return true;

@@ -13,7 +13,7 @@ public class JoinState extends ParserState{
 
         if(!token.equalsIgnoreCase("join") && !next && !token.matches("\\s+")){
             join.getParameters().add(token);
-            System.out.println("param: " + token);
+//            System.out.println("param: " + token);
         }
         return returnClause(next, join);
     }
