@@ -15,11 +15,17 @@ import java.util.List;
 public class MongoDB implements Database{
 
     private MongoClient connection;
+    private MongoDatabase database;
     List<Row> rows;
 
     public MongoDB(){
         this.connection = MongoDBController.getConnection();
         rows = new ArrayList<>();
+    }
+
+    @Override
+    public MongoDatabase getDatabase() {
+        return connection.getDatabase("bp_tim35");
     }
 
     @Override

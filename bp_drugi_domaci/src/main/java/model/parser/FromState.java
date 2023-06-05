@@ -16,7 +16,7 @@ public class FromState extends ParserState{
 
         if(!token.equalsIgnoreCase("from") && !next && !token.matches("\\s+")){
             from.getParameters().add(token);
-            System.out.println("param: " + token);
+//            System.out.println("param: " + token);
         }
         return returnClause(next, from);
     }
