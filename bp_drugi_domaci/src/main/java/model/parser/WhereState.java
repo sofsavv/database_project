@@ -17,10 +17,15 @@ public class WhereState extends ParserState{
                 sb.append(token);
                 where.setTemp(sb.toString());
                 where.getParameters().add(where.getTemp());
+
                 System.out.println("temp na kraju: "+where.getTemp());
+
                 where.setTemp("");
-                sb = new StringBuilder();
                 bracket = false;
+                sb.deleteCharAt(0);
+                sb.deleteCharAt(sb.length()-1);
+//                qp.parse(sb.toString());
+
             }else{
                 sb.append(token);
                 sb.append(" ");
@@ -30,9 +35,7 @@ public class WhereState extends ParserState{
             where.getParameters().add(token);
 //            System.out.println("param: " + token);
         }
-//        else if(token.equalsIgnoreCase("where")){
-//            next = false;
-//        }
+
         return returnClause(next, where);
     }
 
