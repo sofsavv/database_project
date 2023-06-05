@@ -3,8 +3,6 @@ package model.parser;
 import lombok.Getter;
 import lombok.Setter;
 import model.sql_abstraction.AbstractClause;
-import model.validator.*;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,31 +12,20 @@ public class QueryParser {
 
     StateManager stateManager;
     List<AbstractClause> clauses;
-    List<Rule> rules;
-    Rule querySyntaxRule = new QuerySyntaxRule();
-    Rule groupBySelectionRule = new GroupBySelectionRule();
-    Rule tableJoinRule = new TableJoinRule();
-    Rule agregationRule = new AgregationRule();
+
     boolean subquery = false;
 
     public QueryParser(){
         clauses = new ArrayList<>();
     }
 
-    public void parse(String query){
+    public List<AbstractClause> parse(String query){
 
         System.out.println("query: " + query);
         List<String> tokens = new ArrayList<>();
         tokens = List.of(query.split(" "));
 
-        rules = new ArrayList<>();
-        rules.add(querySyntaxRule);
-        rules.add(groupBySelectionRule);
-        rules.add(tableJoinRule);
-        rules.add(agregationRule);
-
         stateManager = new StateManager();
-
         Iterator<String> it = tokens.iterator();
         String tok;
 
@@ -60,10 +47,13 @@ public class QueryParser {
 
             } else if(!isClause(tok)) {
                 stateManager.getCurrentState().process(tok, false, false);
+//                stateManager.getCurrentState().
+                //TODO setujemo
             } else {
                 AbstractClause clause = stateManager.getCurrentState().process(tok, true, false);
                 if(clause != null){
                     clauses.add(clause);
+
                 }
             }
         }
@@ -74,28 +64,18 @@ public class QueryParser {
                 System.out.println("param: " + s);
             }
         }
+    return clauses;
 
-//        checkRules(clauses);
     }
 
 
-    private void checkRules(List<AbstractClause> clauses){
-        boolean check = false;
-        for(Rule rule: rules) {
-            if(!rule.validateQuery(clauses)){
-            //TODO: prekidanje programa tj ne saljemo upit dalje nego opet cekamo input.
-                System.out.println("Greskaaa kraj. ");
-                return;
-            }
-        }
-        //TODO: ako validateQuery vrati zavrsi petlju, znaci da nije doslo do greske
-        // i saljemo upit Adapteru.
-    }
+
 
     private boolean isClause(String token){
 
         if(token.equalsIgnoreCase("select")){
             stateManager.getCurrentState().process(token, true, false);
+//            stateManager.getCurrentState()
             stateManager.setSelectState();
             System.out.println("start select state...");
             return true;
