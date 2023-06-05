@@ -27,7 +27,8 @@ public class QuerySyntaxRule extends Rule{
 
             }else if(clause.getKeyWord().equalsIgnoreCase("from")){
                 fromFlag = true;
-
+                if(clause.getParameters().size() != 1)
+                    return false;
             }else if(clause.getKeyWord().equalsIgnoreCase("group by")){
                 groupByFlag = true;
 
@@ -40,7 +41,10 @@ public class QuerySyntaxRule extends Rule{
         if(!fromFlag || !selectFlag)
             return false;
 
+
+
         boolean isAgg = false;
+
         if(groupByFlag){
             System.out.println("parametri " + selectParams);
             for(String param: selectParams){
