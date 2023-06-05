@@ -32,6 +32,7 @@ public class QuerySyntaxRule extends Rule{
                     return false;
                 }
             } else if (clause.getKeyWord().equalsIgnoreCase("group by")) {
+
                 groupByFlag = true;
 
             }
