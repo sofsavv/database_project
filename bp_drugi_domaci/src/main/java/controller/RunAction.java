@@ -34,13 +34,6 @@ public class RunAction implements ActionListener {
         QueryParser parser1 = new QueryParser();
         String query = textArea.getText();
 
-        parser.parse(query.replace(","," , ")
-                .replace(">="," $gte ")
-                .replace("!="," $ne ")
-                .replace("<="," $lte ")
-                .replace("="," $eq ")
-                .replace(">"," $gt ")
-                .replace("<"," $lt ")
         rules = new ArrayList<>();
         rules.add(querySyntaxRule);
         rules.add(groupBySelectionRule);
@@ -51,12 +44,12 @@ public class RunAction implements ActionListener {
 
         List<AbstractClause> subquery = new ArrayList<>();
         List<AbstractClause> clauses = parser.parse(query.replace(","," , ")
-                .replace(">="," greater_equal ")
-                .replace("!="," not ")
-                .replace("<="," less_equal ")
-                .replace("="," equals ")
-                .replace(">"," greater ")
-                .replace("<"," less ")
+                .replace(">="," $gte ")
+                .replace("!="," $ne ")
+                .replace("<="," $lte ")
+                .replace("="," $eq ")
+                .replace(">"," $gt ")
+                .replace("<"," $lt ")
                 .replace("not in"," not_in ")
                 .replace("group by", "group_by")
                 .replace("order by", "order_by"));
