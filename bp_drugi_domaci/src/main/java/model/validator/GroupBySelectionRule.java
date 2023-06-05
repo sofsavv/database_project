@@ -1,14 +1,14 @@
 package model.validator;
 
-import gui.MainFrame;
 import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.GroupByClause;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupBySelectionRule extends Rule{
+    public GroupBySelectionRule(String name, String message) {
+        super(name, message);
+    }
+
     @Override
     public boolean validateQuery(List<AbstractClause> query) {
 
@@ -45,7 +45,6 @@ public class GroupBySelectionRule extends Rule{
                         }
                     }
                     if(!valid){
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(),"All params from SELECT clause must be under GROUP BY clasue");
                         return false;
                     }else
                         valid = false;
