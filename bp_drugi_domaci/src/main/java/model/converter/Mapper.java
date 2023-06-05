@@ -48,6 +48,11 @@ public class Mapper {
                 .sort(Document.parse(sort))
                 .iterator();
 
+        while (cursor.hasNext()){
+            Document d = cursor.next();
+            System.out.println("STA JE OVO" + d.toJson());
+        }
+
         return cursor;
     }
 
