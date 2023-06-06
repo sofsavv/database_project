@@ -42,16 +42,20 @@ public class Mapper {
 
         }
 
-        cursor = mongoDB.getDatabase().getCollection(collection)
-                .find(Document.parse(find))
-                .projection(Document.parse(projection))
-                .sort(Document.parse(sort))
-                .iterator();
+//        cursor = mongoDB.getDatabase().getCollection(collection)
+//                .find(Document.parse(find))
+//                .projection(Document.parse(projection))
+//                .sort(Document.parse(sort))
+//                .iterator();
+//
+//        while (cursor.hasNext()){
+//            Document d = cursor.next();
+//            System.out.println("STA JE OVO" + d.toJson());
+//        }
 
-        while (cursor.hasNext()){
-            Document d = cursor.next();
-            System.out.println("STA JE OVO" + d.toJson());
-        }
+        AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
+        List<Document> pipeline = aggregation.translate(clauses);
+        cursor = mongoDB.getDatabase().getCollection(collection).aggregate(pipeline).iterator();
 
         return cursor;
     }

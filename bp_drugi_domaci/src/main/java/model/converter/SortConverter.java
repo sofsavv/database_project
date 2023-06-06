@@ -18,6 +18,8 @@ public class SortConverter extends ParameterConverter{
         sb.append("{");
         for(String param: this.getClause().getParameters()){
 
+            if(aggregation(param)) continue;
+
             if(param.equalsIgnoreCase("asc")){
                 sb.append(": 1");
             }else if(param.equalsIgnoreCase("dsc")){
