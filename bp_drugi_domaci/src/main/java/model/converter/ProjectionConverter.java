@@ -17,6 +17,7 @@ public class ProjectionConverter extends ParameterConverter{
 
         for(String param: this.getClause().getParameters()){
 
+            if(aggregation(param)) continue;
             if(param.equals("*")) break;
 
             sb.append(param);

@@ -22,6 +22,8 @@ public class FindConverter extends ParameterConverter{
 
         for(String param: this.getClause().getParameters()){
 
+            if(aggregation(param)) continue;
+
             if(param.equalsIgnoreCase("and")){
 
                 if(close) {

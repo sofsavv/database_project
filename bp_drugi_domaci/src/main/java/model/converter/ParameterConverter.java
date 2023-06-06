@@ -13,4 +13,15 @@ public abstract class ParameterConverter {
         this.clause = clause;
     }
     public abstract String translate();
+
+    public boolean aggregation(String str){
+
+        return (str.startsWith("avg(") && str.endsWith(")"))
+                || (str.startsWith("sum(") && str.endsWith(")"))
+                || (str.startsWith("count(") && str.endsWith(")"))
+                || (str.startsWith("min(") && str.endsWith(")"))
+                || (str.startsWith("max(") && str.endsWith(")"));
+
+    }
+
 }
