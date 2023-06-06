@@ -1,5 +1,7 @@
 package adapter;
 
+import java.util.List;
+
 public interface Adapter {
-    public String getQuery();
+    public List<String> map();
 }

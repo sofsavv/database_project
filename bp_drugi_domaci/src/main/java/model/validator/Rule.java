@@ -19,7 +19,7 @@ public abstract class Rule {
     }
 
     public abstract boolean validateQuery(List<AbstractClause> query);
-    public boolean checkAgregation(String param){
+    public boolean checkAggregation(String param){
         return param.contains("avg(") || param.contains("sum(") || param.contains("min(") || param.contains("max(") || param.contains("count(");
     }
 }

@@ -38,7 +38,7 @@ public class GroupBySelectionRule extends Rule{
         //select name, salary, avg(age) from gr group by name
         //select name ,  s ,  avg(s) from hr group_by name ,
             for(String param: selectParams){
-                if(!checkAgregation(param)){
+                if(!checkAggregation(param)){
                     for(String groupParams: groupByParams){
                         if(groupParams.equalsIgnoreCase(param)){
                             valid = true;

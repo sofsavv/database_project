@@ -5,6 +5,8 @@ import controller.RunAction;
 import lombok.Data;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
 @Data
@@ -31,15 +33,9 @@ public class MainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image icon = Toolkit.getDefaultToolkit().getImage("bp_drugi_domaci/src/main/resources/m1.png");
         this.setIconImage(icon);
-
         jTable = new JTable();
-        JLabel label = new JLabel("No records available");
-        label.setSize( label.getPreferredSize() );
-        jTable.add(label);
         jTable.setFillsViewportHeight(true);
-        jTable.setGridColor(Color.BLUE);
         jTable.setVisible(true);
-        jTable.setPreferredSize(new Dimension(700, 250));
 
         setPreferredSize(new Dimension(700, 500));
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -66,6 +62,7 @@ public class MainFrame extends JFrame {
         buttonPanel.add(runBtn);
 
         JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setPreferredSize(new Dimension(200,200));
         textPanel.setBorder(BorderFactory.createEmptyBorder(10,10,50,10));
 
         textArea = new JTextArea(5,20);
@@ -78,18 +75,20 @@ public class MainFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane, BorderLayout.CENTER);
 
-        jTable.setName("Result set");
-        JScrollPane tableScrollPane = new JScrollPane();
-        tableScrollPane.add(jTable);
 
+
+        JScrollPane tableScrollPane = new JScrollPane(jTable,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tableScrollPane.setViewportView(jTable);
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(buttonPanel, BorderLayout.NORTH);
-        mainPanel.add(textPanel, BorderLayout.CENTER);
-        mainPanel.add(tableScrollPane, BorderLayout.SOUTH);
+        mainPanel.add(textPanel, BorderLayout.SOUTH);
+        mainPanel.add(tableScrollPane, BorderLayout.CENTER);
 
+
+//        add(tableScrollPane);
         add(mainPanel);
         setTitle("SQL to MongoQL converter");
-//        setVisible(true);
+        setVisible(true);
         pack();
 
     }

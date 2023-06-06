@@ -33,7 +33,7 @@ public class AgregationRule extends Rule{
         List<String> params = clause.getParameters();
         //prolazimo kroz listu i traizmo funkc agrgr
         for(String param: params){
-            if(checkAgregation(param)){
+            if(checkAggregation(param)){
                 return false;
             }
         }

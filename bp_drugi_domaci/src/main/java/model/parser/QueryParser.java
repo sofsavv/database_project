@@ -3,6 +3,8 @@ package model.parser;
 import lombok.Getter;
 import lombok.Setter;
 import model.sql.AbstractClause;
+import model.query.SQLquery;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,15 +13,14 @@ import java.util.List;
 public class QueryParser {
 
     StateManager stateManager;
-    List<AbstractClause> clauses;
-
+    SQLquery sqlQuery;
     boolean subquery = false;
 
     public QueryParser(){
-        clauses = new ArrayList<>();
+        sqlQuery = new SQLquery();
     }
 
-    public List<AbstractClause> parse(String query){
+    public void parse(String query){
 
         System.out.println("query: " + query);
         List<String> tokens = new ArrayList<>();
@@ -32,9 +33,7 @@ public class QueryParser {
         while (it.hasNext()){
 
             tok = it.next();
-
-            if(tok.equals(""))
-                continue;
+            if(tok.equals("")) continue;
 
             if(tok.endsWith(")") && !isAggregation(tok) && subquery){
                 subquery = false;
@@ -51,19 +50,17 @@ public class QueryParser {
             } else {
                 AbstractClause clause = stateManager.getCurrentState().process(tok, true, false);
                 if(clause != null){
-                    clauses.add(clause);
-
+                    sqlQuery.addClause(clause);
                 }
             }
         }
-        System.out.println("izlistane klauze");
-        for(AbstractClause c: clauses){
-            System.out.println(c.getKeyWord());
-            for (String s: c.getParameters()){
-                System.out.println("param: " + s);
-            }
+        System.out.println("NOVO: ");
+        for (String s: sqlQuery.getParameters()){
+            System.out.println(s);
         }
-        return clauses;
+        System.out.println("NOVO");
+
+        // sluzi samo da se spakuje u sql query lista clausa...
     }
 
     private boolean isClause(String token){
@@ -71,32 +68,26 @@ public class QueryParser {
         if(token.equalsIgnoreCase("select")){
             stateManager.getCurrentState().process(token, true, false);
             stateManager.setSelectState();
-            System.out.println("start select state...");
             return true;
         }else if(token.equalsIgnoreCase("from")){
             stateManager.getCurrentState().process(token, true, false);
             stateManager.setFromState();
-            System.out.println("start from state...");
             return true;
         }else if(token.equalsIgnoreCase("where")){
             stateManager.getCurrentState().process(token, true, false);
             stateManager.setWhereState();
-            System.out.println("start where state...");
             return true;
         }else if(token.equalsIgnoreCase("join")){
             stateManager.getCurrentState().process(token, true, false);
             stateManager.setJoinState();
-            System.out.println("start join state...");
             return true;
         }else if(token.equalsIgnoreCase("group_by")){
             stateManager.getCurrentState().process(token, true, false);
             stateManager.setGroupByState();
-            System.out.println("start group_by state..");
             return true;
         }else if(token.equalsIgnoreCase("order_by")){
             stateManager.getCurrentState().process(token, true, false);
             stateManager.setOrderByState();
-            System.out.println("start order_by state..");
             return true;
         }
         return false;

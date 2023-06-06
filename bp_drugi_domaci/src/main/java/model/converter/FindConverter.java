@@ -1,14 +1,19 @@
 package model.converter;
 
+import model.query.SQLquery;
 import model.sql.AbstractClause;
+import model.sql.WhereClause;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FindConverter extends ParameterConverter{
 
     // where a > 10 and trek = 'sofija' or b = 10
     // {$or: [{$and: [{a: {$gt: 10 }}, {trek: 'sofija'}] }, {b: 10} ]}
 
-    public FindConverter(AbstractClause clause) {
-        super(clause);
+    public FindConverter(SQLquery sqlQuery) {
+        super(sqlQuery);
     }
 
     @Override
@@ -18,9 +23,14 @@ public class FindConverter extends ParameterConverter{
         boolean close = false;
         int bracket = 0;
         String find;
+        List<String> parameters = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
-        for(String param: this.getClause().getParameters()){
+        if(!clauseParams("where").isEmpty()){
+            parameters = clauseParams("where");
+        }
+
+        for(String param: parameters){
 
             if(aggregation(param)) continue;
 

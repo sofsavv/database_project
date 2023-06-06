@@ -2,6 +2,7 @@ package model.converter;
 
 import com.mongodb.client.MongoCursor;
 import database.MongoDB;
+import model.query.SQLquery;
 import model.sql.*;
 import org.bson.Document;
 
@@ -11,66 +12,40 @@ import java.util.List;
 
 public class Mapper {
 
-    List<AbstractClause> clauses;
+    SQLquery sqlQuery;
     String projection = "{}";
     String collection = "{}";
     String find = "{}";
     String sort = "{}";
 
-    public Mapper(List<AbstractClause> clauses){
-        this.clauses = clauses;
+    public Mapper(SQLquery sqlQuery){
+        this.sqlQuery = sqlQuery;
     }
 
     public HashMap<String, String> map(){
 
-//        MongoDB mongoDB = new MongoDB();
-//        MongoCursor<Document> cursor = null;
-
         HashMap<String, String> convertedParams = new HashMap<>();
-        for(AbstractClause clause: clauses){
+        for(AbstractClause clause: sqlQuery.getClauses()){
 
             if(clause instanceof SelectClause){
-                ParameterConverter projectionConverter = new ProjectionConverter(clause);
+                ParameterConverter projectionConverter = new ProjectionConverter(sqlQuery);
                 projection = projectionConverter.translate();
                 convertedParams.put("projection", projection);
             }else if(clause instanceof FromClause){
-                ParameterConverter collectionConverter = new CollectionConverter(clause);
+                ParameterConverter collectionConverter = new CollectionConverter(sqlQuery);
                 collection = collectionConverter.translate();
                 convertedParams.put("collection",collection);
             }else if(clause instanceof WhereClause){
-                ParameterConverter findConverter = new FindConverter(clause);
+                ParameterConverter findConverter = new FindConverter(sqlQuery);
                 find = findConverter.translate();
                 convertedParams.put("find",find);
             }else if(clause instanceof OrderByClause){
-                ParameterConverter sortConverter = new SortConverter(clause);
+                ParameterConverter sortConverter = new SortConverter(sqlQuery);
                 sort = sortConverter.translate();
                 convertedParams.put("sort",sort);
             }
         }
             return convertedParams;
-
-//        cursor = mongoDB.getDatabase().getCollection(collection)
-//                .find(Document.parse(find))
-//                .projection(Document.parse(projection))
-//                .sort(Document.parse(sort))
-//                .iterator();
-
-
-//         AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
-//         List<Document> stages = aggregation.translate(clauses);
-//         cursor = mongoDB.getDatabase().getCollection(collection).aggregate(stages).iterator();
-
-//         mongoDB.closeConnection();
-//         while (cursor.hasNext()){
-//             Document d = cursor.next();
-//             System.out.println("STA JE OVO" + d.toJson());
-//         }
-
-//        AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
-//        List<Document> pipeline = aggregation.translate(clauses);
-//        cursor = mongoDB.getDatabase().getCollection(collection).aggregate(pipeline).iterator();
-
-//        return cursor;
     }
 
     /**

@@ -19,4 +19,6 @@ public abstract class AbstractClause {
         parameters = new ArrayList<>();
     }
 
+    // treba mi neka lista za svaki clause posebnoo...
+
 }

@@ -2,15 +2,19 @@ package model.converter;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.sql.AbstractClause;
+import model.query.SQLquery;
+import model.sql.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 public abstract class ParameterConverter {
 
-    private AbstractClause clause;
-    public ParameterConverter(AbstractClause clause){
-        this.clause = clause;
+    private SQLquery sqlQuery;
+    public ParameterConverter(SQLquery sqlQuery){
+        this.sqlQuery = sqlQuery;
     }
     public abstract String translate();
 
@@ -24,4 +28,15 @@ public abstract class ParameterConverter {
 
     }
 
+    public List<String> clauseParams(String str){
+
+        List<String> parameters = new ArrayList<>();
+        for(AbstractClause clause: sqlQuery.getClauses()){
+            if(clause.getKeyWord().equalsIgnoreCase(str)){
+                parameters.addAll(clause.getParameters());
+                return parameters;
+            }
+        }
+        return parameters;
+    }
 }

@@ -13,14 +13,10 @@ public class AppCore {
 
     private Database database;
     private TableModel tableModel;
-    private static MainFrame mainFrame;
 
     public AppCore() {
         this.database = new MongoDB();
         this.tableModel = new TableModel();
-        mainFrame = MainFrame.getInstance();
-        mainFrame.setAppCore(this);
-        mainFrame.setVisible(true);
     }
 
     public void readDataFromTable(String fromTable){

@@ -20,11 +20,10 @@ public class TablePackager implements Packager{
     this.columnNames = columnNames;
     }
 
-    public void pack(MongoCursor<Document>  documents) {
+    public void pack(MongoCursor<Document> documents) {
 
         Row row = null;
         List<Row> rows = new ArrayList<>(120);
-
 
         while (documents.hasNext()){
             row = new Row();

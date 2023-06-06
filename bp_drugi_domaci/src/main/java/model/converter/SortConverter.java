@@ -1,12 +1,16 @@
 package model.converter;
 
+import model.query.SQLquery;
 import model.sql.AbstractClause;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SortConverter extends ParameterConverter{
 
     // ORDER BY column1 ASC, column2 DESC -> {column1: 1, column2: -1}
-    public SortConverter(AbstractClause clause) {
-        super(clause);
+    public SortConverter(SQLquery sqlQuery) {
+        super(sqlQuery);
     }
 
     @Override
@@ -14,10 +18,15 @@ public class SortConverter extends ParameterConverter{
 
         String sort = "";
         String alias;
+        List<String> parameters = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
+        if(!clauseParams("order by").isEmpty()){
+            parameters = clauseParams("order by");
+        }
+
         sb.append("{");
-        for(String param: this.getClause().getParameters()){
+        for(String param: parameters){
 
             if(aggregation(param)) {
                 Aggregation agg = new Aggregation(param);

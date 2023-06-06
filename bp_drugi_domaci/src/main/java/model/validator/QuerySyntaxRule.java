@@ -57,7 +57,7 @@ public class QuerySyntaxRule extends Rule{
         if (groupByFlag) {
             System.out.println("parametri " + selectParams);
             for (String param : selectParams) {
-                if (checkAgregation(param)) {
+                if (checkAggregation(param)) {
                     isAgg = true;
                     break;
                 }

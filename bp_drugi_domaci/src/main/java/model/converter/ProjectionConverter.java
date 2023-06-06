@@ -1,21 +1,30 @@
 package model.converter;
 
+import model.query.SQLquery;
 import model.sql.AbstractClause;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectionConverter extends ParameterConverter{
 
-    public ProjectionConverter(AbstractClause clause) {
-        super(clause);
+    public ProjectionConverter(SQLquery sqlQuery) {
+        super(sqlQuery);
     }
     // db.restaurants.find({}).projection({name:1, cuisine:1, _id:0, stars:1})
     @Override
     public String translate() {
 
         String projection = "";
+        List<String> parameters = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb.append("{");
 
-        for(String param: this.getClause().getParameters()){
+        if(!clauseParams("select").isEmpty()){
+            parameters = clauseParams("select");
+        }
+
+        for(String param: parameters){
 
             if(aggregation(param)) continue;
             if(param.equals("*")) break;

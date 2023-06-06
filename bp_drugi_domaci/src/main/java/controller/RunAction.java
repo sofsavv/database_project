@@ -1,6 +1,8 @@
 package controller;
 
 
+import adapter.Adapter;
+import adapter.MongoDBAdapter;
 import com.mongodb.client.MongoCursor;
 import model.converter.Mapper;
 
@@ -10,6 +12,7 @@ import model.executor.Executor;
 import model.packager.Packager;
 import model.packager.TablePackager;
 import model.parser.QueryParser;
+import model.query.SQLquery;
 import model.sql.AbstractClause;
 import model.validator.*;
 import org.bson.Document;
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class RunAction implements ActionListener {
 
     private JTextArea textArea;
+    private boolean agg;
     List<Rule> rules;
     Rule querySyntaxRule = new QuerySyntaxRule("Syntax rule", "Invalid syntax");
     Rule groupBySelectionRule = new GroupBySelectionRule("Group by rule", "All params from SELECT clause must be under GROUP BY clasue");
@@ -38,7 +42,7 @@ public class RunAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         QueryParser parser = new QueryParser();
-        QueryParser parser1 = new QueryParser();
+        QueryParser subParser = new QueryParser();
         String query = textArea.getText();
 
         rules = new ArrayList<>();
@@ -48,29 +52,35 @@ public class RunAction implements ActionListener {
         rules.add(agregationRule);
 
         query = query.toLowerCase();
-        // za adapter replace
-        List<AbstractClause> subquery = new ArrayList<>();
-        List<AbstractClause> clauses = parser.parse(query.replace(","," , ")
-                .replace(">="," $gte ")
-                .replace("!="," $ne ")
-                .replace("<="," $lte ")
-                .replace("="," $eq ")
-                .replace(">"," $gt ")
-                .replace("<"," $lt ")
-                .replace("not in"," not_in ")
+        query = query.replace(",", " , ")
+                .replace("order by", "order_by")
                 .replace("group by", "group_by")
-                .replace("order by", "order_by"));
+                .replace("not in", "not_in")
+                .replace(">", "$gt")
+                .replace("<", "$lt")
+                .replace(">=", "$gte")
+                .replace("<=", "$lte")
+                .replace("!=", "$ne")
+                .replace("=", "$eq");
+
+        parser.parse(query);
+        Adapter mongoDBAdapter = new MongoDBAdapter(parser.getSqlQuery());
+
+        checkRules(parser.getSqlQuery().getClauses());
 
         List<String> selectParams = new ArrayList<>();
-        Optional<AbstractClause> match = clauses.stream().
+        Optional<AbstractClause> match = parser.getSqlQuery().getClauses().stream().
                 filter(c -> c.getKeyWord().equalsIgnoreCase("select")).
                 findFirst();
 
-        checkRules(clauses);
+        if(match.isPresent())
+            selectParams = match.get().getParameters();
+
+        List<AbstractClause> subquery = new ArrayList<>();
 
         StringBuilder stringBuilder = new StringBuilder();
         boolean sq = false;
-        for(AbstractClause clause: clauses){
+        for(AbstractClause clause: parser.getSqlQuery().getClauses()){
             if(clause.getKeyWord().equalsIgnoreCase("where")){
                 for(String whereParams: clause.getParameters()){
                     if(whereParams.contains("select")){
@@ -84,19 +94,32 @@ public class RunAction implements ActionListener {
             }
         }
         if(sq){
-            subquery = parser1.parse(stringBuilder.toString());
-            checkRules(subquery);
+            subParser.parse(stringBuilder.toString());
+            checkRules(subParser.getSqlQuery().getClauses());
         }
 
-        if(match.isPresent())
-            selectParams = match.get().getParameters();
-
-        Mapper mapper = new Mapper(parser.getClauses());
+        Mapper mapper = new Mapper(parser.getSqlQuery());
         Executor executor = new Executor();
-        HashMap<String, String> strings = mapper.map();
-        MongoCursor<Document> docs = executor.execute(strings);
+        MongoCursor<Document> docs;
+
+        for(String s: selectParams){
+            System.out.println("select par: " + s);
+            if(aggregation(s)) {
+                agg = true;
+                System.out.println("usao");
+            }
+        }
+
+        if(!agg) {
+            HashMap<String, String> strings = mapper.map();
+            docs = executor.execute(strings);
+        }
+        else docs = executor.executeAggregation(parser.getSqlQuery());
+
         Packager packager = new TablePackager(selectParams);
+        System.out.println(docs.toString());
         packager.pack(docs);
+
     }
 
     private void checkRules(List<AbstractClause> clauses){
@@ -111,4 +134,14 @@ public class RunAction implements ActionListener {
         //TODO: ako validateQuery vrati zavrsi petlju, znaci da nije doslo do greske
         // i saljemo upit Adapteru.
     }
+    public boolean aggregation(String str){
+
+        return (str.startsWith("avg(") && str.endsWith(")"))
+                || (str.startsWith("sum(") && str.endsWith(")"))
+                || (str.startsWith("count(") && str.endsWith(")"))
+                || (str.startsWith("min(") && str.endsWith(")"))
+                || (str.startsWith("max(") && str.endsWith(")"));
+
+    }
+
 }
