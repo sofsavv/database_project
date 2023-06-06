@@ -1,4 +1,4 @@
-package model.sql_abstraction;
+package model.sql;
 
 import lombok.Getter;
 import lombok.Setter;

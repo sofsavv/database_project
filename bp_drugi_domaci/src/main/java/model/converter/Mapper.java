@@ -2,7 +2,7 @@ package model.converter;
 
 import com.mongodb.client.MongoCursor;
 import database.MongoDB;
-import model.sql_abstraction.*;
+import model.sql.*;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -54,11 +54,17 @@ public class Mapper {
 //                .projection(Document.parse(projection))
 //                .sort(Document.parse(sort))
 //                .iterator();
-//
-//        while (cursor.hasNext()){
-//            Document d = cursor.next();
-//            System.out.println("STA JE OVO" + d.toJson());
-//        }
+
+
+//         AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
+//         List<Document> stages = aggregation.translate(clauses);
+//         cursor = mongoDB.getDatabase().getCollection(collection).aggregate(stages).iterator();
+
+//         mongoDB.closeConnection();
+//         while (cursor.hasNext()){
+//             Document d = cursor.next();
+//             System.out.println("STA JE OVO" + d.toJson());
+//         }
 
 //        AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
 //        List<Document> pipeline = aggregation.translate(clauses);
@@ -66,5 +72,25 @@ public class Mapper {
 
 //        return cursor;
     }
+
+    /**
+     * "[
+     * { \"$match\":
+     * { \"$or\": [
+     *          { \"department_id\": { \"$gt\": 30 } },
+     *          { \"manager_id\": { \"$lt\": 120 } }
+     *          ]
+     * } },
+     * { \"$group\":
+     *          { \"_id\":
+     *          { \"department_id\": \"$department_id\", \"manager_id\": \"$manager_id\" },
+     *          \"avgSalary\": { \"$avg\": \"$salary\" }
+     *          }
+     * },
+     * { \"$sort\":
+     *          { \"avgSalary\": 1, \"department_id\": 1 }
+     * }
+     * ]";
+     * */
 
 }

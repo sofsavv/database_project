@@ -15,13 +15,13 @@ public class Aggregation {
     }
 
     private void setAttributes(String aggregation){
-        String agg = "$" + aggregation.substring(0, 3);
+        String agg = "\"" + "$" + aggregation.substring(0, 3) + "\"";
         setAggFunction(agg);
 
         String par = aggregation.substring(4, aggregation.length()-1).substring(0, 1).toUpperCase();
         String rest = aggregation.substring(4, aggregation.length()-1).substring(1);
         agg = aggregation.substring(0, 3);
-        String a = agg + par + rest;
+        String a = "\"" + agg + par + rest + "\"";
         setAlias(a);
         a = "\"" + "$" + aggregation.substring(4, aggregation.length()-1) + "\"";
         setParameter(a);

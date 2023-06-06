@@ -1,7 +1,7 @@
 package model.parser;
 
-import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.SelectClause;
+import model.sql.AbstractClause;
+import model.sql.SelectClause;
 
 public class SelectState extends ParserState{
 

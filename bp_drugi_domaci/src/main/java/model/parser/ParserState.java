@@ -1,6 +1,6 @@
 package model.parser;
 
-import model.sql_abstraction.AbstractClause;
+import model.sql.AbstractClause;
 
 public abstract class ParserState {
 

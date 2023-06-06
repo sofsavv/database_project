@@ -1,8 +1,8 @@
 package model.validator;
 
 
-import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.WhereClause;
+import model.sql.AbstractClause;
+import model.sql.WhereClause;
 
 import java.util.List;
 

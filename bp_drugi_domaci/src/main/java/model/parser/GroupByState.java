@@ -1,7 +1,7 @@
 package model.parser;
 
-import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.GroupByClause;
+import model.sql.AbstractClause;
+import model.sql.GroupByClause;
 
 public class GroupByState extends ParserState{
     AbstractClause group_by = null;

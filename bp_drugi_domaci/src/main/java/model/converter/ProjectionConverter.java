@@ -1,6 +1,6 @@
 package model.converter;
 
-import model.sql_abstraction.AbstractClause;
+import model.sql.AbstractClause;
 
 public class ProjectionConverter extends ParameterConverter{
 

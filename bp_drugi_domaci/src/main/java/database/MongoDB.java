@@ -18,12 +18,20 @@ public class MongoDB implements Database{
     List<Row> rows;
 
     public MongoDB(){
-        this.connection = MongoDBController.getConnection();
         rows = new ArrayList<>();
+    }
+
+    public void startConnection(){
+        this.connection = MongoDBController.getConnection();
+    }
+
+    public void closeConnection(){
+        this.connection.close();
     }
 
     @Override
     public MongoDatabase getDatabase() {
+        startConnection();
         return connection.getDatabase("bp_tim35");
     }
 
