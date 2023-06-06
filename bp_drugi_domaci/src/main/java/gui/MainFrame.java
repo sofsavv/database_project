@@ -33,9 +33,15 @@ public class MainFrame extends JFrame {
         this.setIconImage(icon);
 
         jTable = new JTable();
+        JLabel label = new JLabel("No records available");
+        label.setSize( label.getPreferredSize() );
+        jTable.add(label);
         jTable.setFillsViewportHeight(true);
-        setPreferredSize(new Dimension(700, 500));
+        jTable.setGridColor(Color.BLUE);
+        jTable.setVisible(true);
+        jTable.setPreferredSize(new Dimension(700, 250));
 
+        setPreferredSize(new Dimension(700, 500));
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
 //        String fileName = "/resources/run.png";
@@ -72,6 +78,7 @@ public class MainFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane, BorderLayout.CENTER);
 
+        jTable.setName("Result set");
         JScrollPane tableScrollPane = new JScrollPane();
         tableScrollPane.add(jTable);
 
