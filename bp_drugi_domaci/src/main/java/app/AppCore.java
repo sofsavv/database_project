@@ -19,6 +19,7 @@ public class AppCore {
         this.database = new MongoDB();
         this.tableModel = new TableModel();
         mainFrame = MainFrame.getInstance();
+        mainFrame.setAppCore(this);
         mainFrame.setVisible(true);
     }
 
