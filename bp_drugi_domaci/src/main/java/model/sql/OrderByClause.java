@@ -1,9 +1,4 @@
-package model.sql_abstraction;
-
-import model.Operators;
-
-import java.util.ArrayList;
-import java.util.List;
+package model.sql;
 
 public class OrderByClause extends AbstractClause{
 

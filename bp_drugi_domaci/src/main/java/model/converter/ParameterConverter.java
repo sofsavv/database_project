@@ -2,7 +2,7 @@ package model.converter;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.sql_abstraction.AbstractClause;
+import model.sql.AbstractClause;
 
 @Getter
 @Setter

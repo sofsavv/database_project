@@ -1,13 +1,18 @@
 package adapter;
 
-import com.mongodb.client.MongoCursor;
-import model.sql_abstraction.AbstractClause;
-import org.bson.Document;
+import model.sql.Query;
 
-public class MongoDBAdapter implements Adapter {
+public class MongoDBAdapter implements Adapter{
+
+
+    public MongoDBAdapter(Query query){
+
+    }
     @Override
-    public MongoCursor<Document> getMongoQuery(AbstractClause clause) {
-
+    public String getQuery() {
         return null;
     }
+
+    // konstruktor uzima IQuery -> getPar()
+
 }

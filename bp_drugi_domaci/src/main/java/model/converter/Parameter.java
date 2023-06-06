@@ -16,6 +16,8 @@ public class Parameter {
         setGroupParam(pom);
         pom = "\"$_id." + parameter + "\"";
         setProjectParam(pom);
+        pom = "\"" + parameter + "\"";
+        setParameter(pom);
     }
 
 }

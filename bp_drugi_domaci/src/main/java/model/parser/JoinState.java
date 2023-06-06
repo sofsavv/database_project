@@ -1,7 +1,7 @@
 package model.parser;
 
-import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.JoinClause;
+import model.sql.AbstractClause;
+import model.sql.JoinClause;
 
 public class JoinState extends ParserState{
     AbstractClause join = null;

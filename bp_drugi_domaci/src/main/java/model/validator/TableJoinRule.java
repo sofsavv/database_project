@@ -1,6 +1,6 @@
 package model.validator;
 
-import model.sql_abstraction.AbstractClause;
+import model.sql.AbstractClause;
 
 import java.util.ArrayList;
 import java.util.List;

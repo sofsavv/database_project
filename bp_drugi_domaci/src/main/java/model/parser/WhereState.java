@@ -1,7 +1,7 @@
 package model.parser;
 
-import model.sql_abstraction.AbstractClause;
-import model.sql_abstraction.WhereClause;
+import model.sql.AbstractClause;
+import model.sql.WhereClause;
 
 public class WhereState extends ParserState{
     AbstractClause where = null;

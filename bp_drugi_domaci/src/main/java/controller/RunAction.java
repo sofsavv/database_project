@@ -9,7 +9,7 @@ import gui.MainFrame;
 import model.packager.Packager;
 import model.packager.TablePackager;
 import model.parser.QueryParser;
-import model.sql_abstraction.AbstractClause;
+import model.sql.AbstractClause;
 import model.validator.*;
 import org.bson.Document;
 
@@ -46,7 +46,7 @@ public class RunAction implements ActionListener {
         rules.add(agregationRule);
 
         query = query.toLowerCase();
-
+        // za adapter replace
         List<AbstractClause> subquery = new ArrayList<>();
         List<AbstractClause> clauses = parser.parse(query.replace(","," , ")
                 .replace(">="," $gte ")

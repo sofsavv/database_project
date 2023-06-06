@@ -1,4 +1,4 @@
-package model.sql_abstraction;
+package model.sql;
 
 public class SelectClause extends AbstractClause{
     public SelectClause() {
