@@ -1,19 +1,24 @@
 package controller;
 
 
+import com.mongodb.client.MongoCursor;
 import model.converter.Mapper;
 
 import gui.MainFrame;
 
+import model.packager.Packager;
+import model.packager.TablePackager;
 import model.parser.QueryParser;
 import model.sql_abstraction.AbstractClause;
 import model.validator.*;
+import org.bson.Document;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RunAction implements ActionListener {
 
@@ -54,13 +59,28 @@ public class RunAction implements ActionListener {
                 .replace("group by", "group_by")
                 .replace("order by", "order_by"));
 
+        List<String> selectParams = new ArrayList<>();
+        Optional<AbstractClause> match = clauses.stream().
+                filter(c -> c.getKeyWord().equalsIgnoreCase("select")).
+                findFirst();
+
+        if(match.isPresent())
+            selectParams = match.get().getParameters();
+
         Mapper mapper = new Mapper(parser.getClauses());
-        mapper.map();
+        Packager packager = new TablePackager(selectParams);
+
+        MongoCursor<Document> docs = mapper.map();
+        packager.pack(docs);
+
+
+//        mapper.map();
         checkRules(clauses);
 
-        String subQuery = null;
+        StringBuilder stringBuilder = new StringBuilder();
         boolean sq = false;
         for(AbstractClause clause: clauses){
+
             if(clause.getKeyWord().equalsIgnoreCase("where")){
 
                 for(String whereParams: clause.getParameters()){
@@ -69,15 +89,14 @@ public class RunAction implements ActionListener {
                         sq = true;
                         int start = whereParams.indexOf("(");
                         int end = whereParams.lastIndexOf(")");
-                        subQuery = whereParams.substring(start+1, end);
+                        stringBuilder.append(whereParams.substring(start+1, end));
                         break;
                     }
                 }
             }
         }
         if(sq){
-            if(subQuery != null)
-                subquery = parser1.parse(subQuery);
+            subquery = parser1.parse(stringBuilder.toString());
             checkRules(subquery);
         }
 
