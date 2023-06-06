@@ -5,6 +5,8 @@ import database.MongoDB;
 import model.sql_abstraction.*;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Mapper {
@@ -19,28 +21,33 @@ public class Mapper {
         this.clauses = clauses;
     }
 
-    public MongoCursor<Document> map(){
+    public HashMap<String, String> map(){
 
-        MongoDB mongoDB = new MongoDB();
-        MongoCursor<Document> cursor = null;
+//        MongoDB mongoDB = new MongoDB();
+//        MongoCursor<Document> cursor = null;
 
+        HashMap<String, String> convertedParams = new HashMap<>();
         for(AbstractClause clause: clauses){
 
             if(clause instanceof SelectClause){
                 ParameterConverter projectionConverter = new ProjectionConverter(clause);
                 projection = projectionConverter.translate();
+                convertedParams.put("projection", projection);
             }else if(clause instanceof FromClause){
                 ParameterConverter collectionConverter = new CollectionConverter(clause);
                 collection = collectionConverter.translate();
+                convertedParams.put("collection",collection);
             }else if(clause instanceof WhereClause){
                 ParameterConverter findConverter = new FindConverter(clause);
                 find = findConverter.translate();
+                convertedParams.put("find",find);
             }else if(clause instanceof OrderByClause){
                 ParameterConverter sortConverter = new SortConverter(clause);
                 sort = sortConverter.translate();
+                convertedParams.put("sort",sort);
             }
-
         }
+            return convertedParams;
 
 //        cursor = mongoDB.getDatabase().getCollection(collection)
 //                .find(Document.parse(find))
@@ -53,11 +60,11 @@ public class Mapper {
 //            System.out.println("STA JE OVO" + d.toJson());
 //        }
 
-        AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
-        List<Document> pipeline = aggregation.translate(clauses);
-        cursor = mongoDB.getDatabase().getCollection(collection).aggregate(pipeline).iterator();
+//        AggregationConverter aggregation = new AggregationConverter(clauses.get(0));
+//        List<Document> pipeline = aggregation.translate(clauses);
+//        cursor = mongoDB.getDatabase().getCollection(collection).aggregate(pipeline).iterator();
 
-        return cursor;
+//        return cursor;
     }
 
 }

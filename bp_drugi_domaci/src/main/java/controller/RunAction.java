@@ -6,6 +6,7 @@ import model.converter.Mapper;
 
 import gui.MainFrame;
 
+import model.executor.Executor;
 import model.packager.Packager;
 import model.packager.TablePackager;
 import model.parser.QueryParser;
@@ -17,6 +18,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,27 +66,13 @@ public class RunAction implements ActionListener {
                 filter(c -> c.getKeyWord().equalsIgnoreCase("select")).
                 findFirst();
 
-        if(match.isPresent())
-            selectParams = match.get().getParameters();
-
-        Mapper mapper = new Mapper(parser.getClauses());
-        Packager packager = new TablePackager(selectParams);
-
-        MongoCursor<Document> docs = mapper.map();
-        packager.pack(docs);
-
-
-//        mapper.map();
         checkRules(clauses);
 
         StringBuilder stringBuilder = new StringBuilder();
         boolean sq = false;
         for(AbstractClause clause: clauses){
-
             if(clause.getKeyWord().equalsIgnoreCase("where")){
-
                 for(String whereParams: clause.getParameters()){
-//         salary in (select department j)
                     if(whereParams.contains("select")){
                         sq = true;
                         int start = whereParams.indexOf("(");
@@ -100,6 +88,15 @@ public class RunAction implements ActionListener {
             checkRules(subquery);
         }
 
+        if(match.isPresent())
+            selectParams = match.get().getParameters();
+
+        Mapper mapper = new Mapper(parser.getClauses());
+        Executor executor = new Executor();
+        HashMap<String, String> strings = mapper.map();
+        MongoCursor<Document> docs = executor.execute(strings);
+        Packager packager = new TablePackager(selectParams);
+        packager.pack(docs);
     }
 
     private void checkRules(List<AbstractClause> clauses){
