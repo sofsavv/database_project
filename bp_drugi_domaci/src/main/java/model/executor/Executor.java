@@ -4,6 +4,8 @@ import com.mongodb.client.MongoCursor;
 import database.MongoDB;
 import model.converter.AggregationConverter;
 import model.query.SQLquery;
+import model.sql.AbstractClause;
+import model.sql.FromClause;
 import org.bson.Document;
 
 import java.util.HashMap;
@@ -32,7 +34,13 @@ public class Executor {
                 .sort(Document.parse(sort))
                 .iterator();
 
-        mongoDB.closeConnection();
+//        System.out.println("**********");
+//        while (cursor.hasNext()){
+//            Document d = cursor.next();
+//            System.out.println("data: " + d.toJson());
+//        }
+
+//        mongoDB.closeConnection();
 
         return cursor;
     }
@@ -41,12 +49,24 @@ public class Executor {
 
         MongoDB mongoDB = new MongoDB();
         MongoCursor<Document> cursor;
-        System.out.println("USAO U EXC");
+
+        for(AbstractClause clause: sqlQuery.getClauses()){
+            if(clause instanceof FromClause){
+                collection = clause.getParameters().get(0);
+            }
+        }
+
         AggregationConverter aggregation = new AggregationConverter(sqlQuery);
         List<Document> pipeline = aggregation.translate(sqlQuery.getClauses());
         cursor = mongoDB.getDatabase().getCollection(collection).aggregate(pipeline).iterator();
 
-        mongoDB.closeConnection();
+//        System.out.println("**********");
+//        while (cursor.hasNext()){
+//            Document d = cursor.next();
+//            System.out.println("data: " + d.toJson());
+//        }
+
+//        mongoDB.closeConnection();
 
         return cursor;
     }

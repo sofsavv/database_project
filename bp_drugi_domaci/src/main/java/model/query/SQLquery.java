@@ -24,12 +24,7 @@ public class SQLquery implements Query {
 
         for(AbstractClause c: clauses){
 
-            if(c.getKeyWord().equalsIgnoreCase("order by"))
-                sqlQ.add("order_by");
-            else if(c.getKeyWord().equalsIgnoreCase("group by"))
-                sqlQ.add("group_by");
-            else
-                sqlQ.add(c.getKeyWord());
+            sqlQ.add(c.getKeyWord());
 
                for(String p: c.getParameters()){
                    if(!p.equals(",")){

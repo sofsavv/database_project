@@ -75,8 +75,6 @@ public class MainFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         textPanel.add(scrollPane, BorderLayout.CENTER);
 
-
-
         JScrollPane tableScrollPane = new JScrollPane(jTable,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         tableScrollPane.setViewportView(jTable);
         JPanel mainPanel = new JPanel(new BorderLayout());

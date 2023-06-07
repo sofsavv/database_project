@@ -1,6 +1,5 @@
 package controller;
 
-
 import adapter.Adapter;
 import adapter.MongoDBAdapter;
 import com.mongodb.client.MongoCursor;
@@ -12,8 +11,8 @@ import model.executor.Executor;
 import model.packager.Packager;
 import model.packager.TablePackager;
 import model.parser.QueryParser;
-import model.query.SQLquery;
 import model.sql.AbstractClause;
+import model.sql.SelectClause;
 import model.validator.*;
 import org.bson.Document;
 
@@ -44,6 +43,7 @@ public class RunAction implements ActionListener {
         QueryParser parser = new QueryParser();
         QueryParser subParser = new QueryParser();
         String query = textArea.getText();
+        AbstractClause selectClause = null;
 
         rules = new ArrayList<>();
         rules.add(querySyntaxRule);
@@ -56,15 +56,21 @@ public class RunAction implements ActionListener {
                 .replace("order by", "order_by")
                 .replace("group by", "group_by")
                 .replace("not in", "not_in")
-                .replace(">", "$gt")
-                .replace("<", "$lt")
-                .replace(">=", "$gte")
-                .replace("<=", "$lte")
-                .replace("!=", "$ne")
-                .replace("=", "$eq");
+                .replace(">=", " $gte ")
+                .replace("<=", " $lte ")
+                .replace(">", " $gt ")
+                .replace("<", " $lt ")
+                .replace("!=", " $ne ")
+                .replace("=", " $eq ")
+                .replace("'%","/")
+                .replace("%'","/");
 
         parser.parse(query);
         Adapter mongoDBAdapter = new MongoDBAdapter(parser.getSqlQuery());
+
+        for(AbstractClause clause: parser.getSqlQuery().getClauses()){
+            if(clause instanceof SelectClause) selectClause = clause;
+        }
 
         checkRules(parser.getSqlQuery().getClauses());
 
@@ -101,6 +107,7 @@ public class RunAction implements ActionListener {
         Mapper mapper = new Mapper(parser.getSqlQuery());
         Executor executor = new Executor();
         MongoCursor<Document> docs;
+        Packager packager = new TablePackager(selectParams, selectClause);
 
         for(String s: selectParams){
             System.out.println("select par: " + s);
@@ -113,12 +120,11 @@ public class RunAction implements ActionListener {
         if(!agg) {
             HashMap<String, String> strings = mapper.map();
             docs = executor.execute(strings);
+            packager.pack(docs);
+        } else {
+            docs = executor.executeAggregation(parser.getSqlQuery());
+            packager.packAggregation(docs);
         }
-        else docs = executor.executeAggregation(parser.getSqlQuery());
-
-        Packager packager = new TablePackager(selectParams);
-        System.out.println(docs.toString());
-        packager.pack(docs);
 
     }
 

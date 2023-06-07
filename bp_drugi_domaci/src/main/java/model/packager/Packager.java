@@ -7,4 +7,6 @@ import org.bson.Document;
 public interface Packager {
 
     void pack(MongoCursor<Document> documents);
+
+    void packAggregation(MongoCursor<Document> docs);
 }

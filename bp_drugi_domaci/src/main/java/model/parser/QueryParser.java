@@ -54,13 +54,6 @@ public class QueryParser {
                 }
             }
         }
-        System.out.println("NOVO: ");
-        for (String s: sqlQuery.getParameters()){
-            System.out.println(s);
-        }
-        System.out.println("NOVO");
-
-        // sluzi samo da se spakuje u sql query lista clausa...
     }
 
     private boolean isClause(String token){
