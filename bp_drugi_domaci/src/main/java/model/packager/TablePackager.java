@@ -1,22 +1,14 @@
 package model.packager;
 
-import app.AppCore;
-import com.mongodb.DBCursor;
+
 import com.mongodb.client.MongoCursor;
-import com.sun.tools.javac.Main;
 import data.Row;
 import gui.MainFrame;
 import model.converter.Aggregation;
-import model.query.SQLquery;
 import model.sql.AbstractClause;
 import org.bson.Document;
-
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class TablePackager implements Packager{
     List<String> columnNames;
@@ -28,37 +20,28 @@ public class TablePackager implements Packager{
 
     public void pack(MongoCursor<Document> documents) {
 
-        Row row = null;
-        List<Row> rows = new ArrayList<>(120);
+        Row row;
+        List<Row> rows = new ArrayList<>();
 
-//        System.out.println("***********");
-//        while (documents.hasNext()){
-//            Document d = documents.next();
-//            System.out.println("data: " + d.toJson());
-//        }
 
         while (documents.hasNext()){
             row = new Row();
             Document document = documents.next();
             for(String data: columnNames) {
-//                System.out.println("data: " + data);
+                //last_name - king
                 if (data.contains(","))
                     continue;
                 try {
-//                    row.addField("document_id", document.get("avgSalary"));
                     row.addField(data, document.get(data));
                 } catch (NoSuchElementException e) {
-                    e.printStackTrace();
+                    e.getMessage();
                     System.out.println("null pointer");
                 }
-                rows.add(row);
+
             }
+            rows.add(row);
         }
-//        int i = 0;
-//        for(Row row1: rows){
-//            System.out.println(i + ". " + row1);
-//            i++;
-//        }
+
         MainFrame.getInstance().getAppCore().getTableModel().setRows(rows);
     }
 
@@ -68,13 +51,7 @@ public class TablePackager implements Packager{
         List<String> fs_agg = new ArrayList<>();
         List<Row> rows = new ArrayList<>();
         Aggregation a = null;
-        Row row = null;
-
-//        System.out.println("***********");
-//        while (documents.hasNext()){
-//            Document d = documents.next();
-//            System.out.println("data: " + d.toJson());
-//        }
+        Row row;
 
         for(String param: clause.getParameters()){
             if(param.contains("(") && param.contains(")")){
@@ -113,6 +90,7 @@ public class TablePackager implements Packager{
         }
 
         MainFrame.getInstance().getAppCore().getTableModel().setRows(rows);
-    }
+//        MainFrame.getInstance().getJTable().setModel(MainFrame.getInstance().getAppCore().getTableModel());
 
+    }
 }
