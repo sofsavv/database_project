@@ -14,6 +14,7 @@ import org.bson.Document;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -103,7 +104,14 @@ public class TablePackager implements Packager{
                 row.addField(agg, d1.get(a.getAlias()));
                 rows.add(row);
             }
+
+            for(Row r: rows){
+                System.out.println(r.getFields());
+            }
+
+            rows.removeIf(r -> r.getFields().isEmpty());
         }
+
         MainFrame.getInstance().getAppCore().getTableModel().setRows(rows);
     }
 
